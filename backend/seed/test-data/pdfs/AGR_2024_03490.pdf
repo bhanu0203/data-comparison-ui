@@ -1,0 +1,209 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [4 0 R 6 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792]
+   /Contents 5 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+5 0 obj
+<< /Length 2487 >>
+stream
+BT
+/F1 16 Tf
+1 0 0 1 50 750 Tm
+(MANAGED SECURITY SERVICES AGREEMENT) Tj
+/F1 13 Tf
+1 0 0 1 50 712 Tm
+(AGREEMENT DETAILS) Tj
+/F1 10 Tf
+1 0 0 1 70 690 Tm
+(Agreement ID: AGR-2024-03490) Tj
+/F1 10 Tf
+1 0 0 1 70 675 Tm
+(Type: Managed Security Services Agreement) Tj
+/F1 10 Tf
+1 0 0 1 70 660 Tm
+(Status: Active) Tj
+/F1 10 Tf
+1 0 0 1 70 645 Tm
+(Effective Date: 2024-02-01) Tj
+/F1 10 Tf
+1 0 0 1 70 630 Tm
+(Expiration Date: 2026-01-31) Tj
+/F1 10 Tf
+1 0 0 1 70 615 Tm
+(Auto-Renewal: Yes) Tj
+/F1 13 Tf
+1 0 0 1 50 588 Tm
+(PARTIES) Tj
+/F1 11 Tf
+1 0 0 1 60 566 Tm
+(Bank / Financial Institution) Tj
+/F1 10 Tf
+1 0 0 1 70 548 Tm
+(Name: Meridian Trust Bank) Tj
+/F1 10 Tf
+1 0 0 1 70 533 Tm
+(Registration Number: BNK-667432) Tj
+/F1 10 Tf
+1 0 0 1 70 518 Tm
+(Jurisdiction: State of Connecticut) Tj
+/F1 10 Tf
+1 0 0 1 70 503 Tm
+(Address: 100 Pearl Street, 18th Floor, Hartford, CT 06103, United States) Tj
+/F1 10 Tf
+1 0 0 1 70 488 Tm
+(Signatory: Anthony D. Marchetti, Chief Information Security Officer) Tj
+/F1 11 Tf
+1 0 0 1 60 461 Tm
+(Third Party / Vendor) Tj
+/F1 10 Tf
+1 0 0 1 70 443 Tm
+(Name: CyberShield Defense Corp.) Tj
+/F1 10 Tf
+1 0 0 1 70 428 Tm
+(Registration Number: CSD-2020-91845) Tj
+/F1 10 Tf
+1 0 0 1 70 413 Tm
+(Jurisdiction: State of Maryland) Tj
+/F1 10 Tf
+1 0 0 1 70 398 Tm
+(Address: 7900 Westpark Drive, Suite T300, Tysons, VA 22102, United States) Tj
+/F1 10 Tf
+1 0 0 1 70 383 Tm
+(Signatory: Rachel K. Nguyen, Director of Client Engagement) Tj
+/F1 10 Tf
+1 0 0 1 70 368 Tm
+(Contact Email: r.nguyen@cybershield.com) Tj
+/F1 13 Tf
+1 0 0 1 50 341 Tm
+(FINANCIAL TERMS) Tj
+/F1 10 Tf
+1 0 0 1 70 319 Tm
+(Currency: USD) Tj
+/F1 10 Tf
+1 0 0 1 70 304 Tm
+(Base Fee: $420,000.00) Tj
+/F1 10 Tf
+1 0 0 1 70 289 Tm
+(Billing Cycle: Monthly) Tj
+/F1 10 Tf
+1 0 0 1 70 274 Tm
+(Payment Terms: Net 30) Tj
+/F1 11 Tf
+1 0 0 1 60 259 Tm
+(Penalties) Tj
+/F1 10 Tf
+1 0 0 1 70 241 Tm
+(Late Payment Rate: 1.5%) Tj
+/F1 10 Tf
+1 0 0 1 70 226 Tm
+(Early Termination Fee: $600,000.00) Tj
+/F1 10 Tf
+1 0 0 1 70 211 Tm
+(Incident Response Sla Breach: $50,000.00) Tj
+/F1 11 Tf
+1 0 0 1 60 196 Tm
+(Additional Services) Tj
+/F1 10 Tf
+1 0 0 1 70 178 Tm
+(Penetration Testing: $75,000.00) Tj
+/F1 10 Tf
+1 0 0 1 70 163 Tm
+(Red Team Exercise: $150,000.00) Tj
+/F1 10 Tf
+1 0 0 1 70 148 Tm
+(Forensic Investigation: $200.00) Tj
+/F1 10 Tf
+1 0 0 1 70 133 Tm
+(Threat Intel Feed: $36,000.00) Tj
+/F1 13 Tf
+1 0 0 1 50 106 Tm
+(SERVICE LEVEL) Tj
+/F1 10 Tf
+1 0 0 1 70 84 Tm
+(Monitoring Coverage: 24/7/365) Tj
+/F1 11 Tf
+1 0 0 1 60 69 Tm
+(Incident Response Time) Tj
+ET
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792]
+   /Contents 7 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+7 0 obj
+<< /Length 986 >>
+stream
+BT
+/F1 10 Tf
+1 0 0 1 70 750 Tm
+(Critical: 5 minutes) Tj
+/F1 10 Tf
+1 0 0 1 70 735 Tm
+(High: 15 minutes) Tj
+/F1 10 Tf
+1 0 0 1 70 720 Tm
+(Medium: 1 hour) Tj
+/F1 10 Tf
+1 0 0 1 70 705 Tm
+(Low: 4 hours) Tj
+/F1 10 Tf
+1 0 0 1 70 690 Tm
+(Threat Detection Sla: Under 15 minutes) Tj
+/F1 10 Tf
+1 0 0 1 70 675 Tm
+(False Positive Rate: Below 5%) Tj
+/F1 10 Tf
+1 0 0 1 70 660 Tm
+(Maintenance Window: No scheduled downtime \(HA cluster\)) Tj
+/F1 10 Tf
+1 0 0 1 70 645 Tm
+(Data Retention: 3 years \(logs\), 7 years \(incidents\)) Tj
+/F1 13 Tf
+1 0 0 1 50 618 Tm
+(COMPLIANCE) Tj
+/F1 10 Tf
+1 0 0 1 70 596 Tm
+(Regulatory Frameworks: NIST CSF, SOC 2 Type II, PCI DSS, FFIEC CAT) Tj
+/F1 10 Tf
+1 0 0 1 70 581 Tm
+(Audit Frequency: Annual) Tj
+/F1 10 Tf
+1 0 0 1 70 566 Tm
+(Data Classification: Restricted) Tj
+/F1 10 Tf
+1 0 0 1 70 551 Tm
+(Encryption Standard: AES-256-GCM + TLS 1.3) Tj
+/F1 10 Tf
+1 0 0 1 70 536 Tm
+(Last Audit Date: 2024-01-08) Tj
+/F1 10 Tf
+1 0 0 1 70 521 Tm
+(Clearance Level: FedRAMP Moderate) Tj
+ET
+endstream
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000121 00000 n 
+0000000191 00000 n 
+0000000320 00000 n 
+0000002859 00000 n 
+0000002988 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R >>
+startxref
+4025
+%%EOF

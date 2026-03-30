@@ -1,0 +1,227 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [4 0 R 6 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792]
+   /Contents 5 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+5 0 obj
+<< /Length 2567 >>
+stream
+BT
+/F1 16 Tf
+1 0 0 1 50 750 Tm
+(WEALTH MANAGEMENT PLATFORM AGREEMENT) Tj
+/F1 13 Tf
+1 0 0 1 50 712 Tm
+(AGREEMENT DETAILS) Tj
+/F1 10 Tf
+1 0 0 1 70 690 Tm
+(Agreement ID: AGR-2024-06298) Tj
+/F1 10 Tf
+1 0 0 1 70 675 Tm
+(Type: Wealth Management Platform Agreement) Tj
+/F1 10 Tf
+1 0 0 1 70 660 Tm
+(Status: Pending Review) Tj
+/F1 10 Tf
+1 0 0 1 70 645 Tm
+(Effective Date: 2024-08-01) Tj
+/F1 10 Tf
+1 0 0 1 70 630 Tm
+(Expiration Date: 2029-07-31) Tj
+/F1 10 Tf
+1 0 0 1 70 615 Tm
+(Auto-Renewal: No) Tj
+/F1 13 Tf
+1 0 0 1 50 588 Tm
+(PARTIES) Tj
+/F1 11 Tf
+1 0 0 1 60 566 Tm
+(Bank / Financial Institution) Tj
+/F1 10 Tf
+1 0 0 1 70 548 Tm
+(Name: Graystone Private Bank & Trust) Tj
+/F1 10 Tf
+1 0 0 1 70 533 Tm
+(Registration Number: BNK-882134) Tj
+/F1 10 Tf
+1 0 0 1 70 518 Tm
+(Jurisdiction: State of Illinois) Tj
+/F1 10 Tf
+1 0 0 1 70 503 Tm
+(Address: 233 South Wacker Drive, 54th Floor, Chicago, IL 60606, United States) Tj
+/F1 10 Tf
+1 0 0 1 70 488 Tm
+(Signatory: Victoria R. Ashworth, Managing Director, Wealth Management) Tj
+/F1 11 Tf
+1 0 0 1 60 461 Tm
+(Third Party / Vendor) Tj
+/F1 10 Tf
+1 0 0 1 70 443 Tm
+(Name: WealthOS Technologies LLC) Tj
+/F1 10 Tf
+1 0 0 1 70 428 Tm
+(Registration Number: WOS-2018-29471) Tj
+/F1 10 Tf
+1 0 0 1 70 413 Tm
+(Jurisdiction: State of North Carolina) Tj
+/F1 10 Tf
+1 0 0 1 70 398 Tm
+(Address: 525 Fayetteville Street, Suite 400, Raleigh, NC 27601, United States) Tj
+/F1 10 Tf
+1 0 0 1 70 383 Tm
+(Signatory: Daniel H. Foster, Chief Commercial Officer) Tj
+/F1 10 Tf
+1 0 0 1 70 368 Tm
+(Contact Email: d.foster@wealthos.com) Tj
+/F1 13 Tf
+1 0 0 1 50 341 Tm
+(FINANCIAL TERMS) Tj
+/F1 10 Tf
+1 0 0 1 70 319 Tm
+(Currency: USD) Tj
+/F1 10 Tf
+1 0 0 1 70 304 Tm
+(License Fee: $750,000.00) Tj
+/F1 10 Tf
+1 0 0 1 70 289 Tm
+(Annual Maintenance Fee: $150,000.00) Tj
+/F1 10 Tf
+1 0 0 1 70 274 Tm
+(Implementation Fee: $500,000.00) Tj
+/F1 10 Tf
+1 0 0 1 70 259 Tm
+(Billing Cycle: Quarterly) Tj
+/F1 10 Tf
+1 0 0 1 70 244 Tm
+(Payment Terms: Net 45) Tj
+/F1 11 Tf
+1 0 0 1 60 229 Tm
+(Penalties) Tj
+/F1 10 Tf
+1 0 0 1 70 211 Tm
+(Late Payment Rate: 1.5%) Tj
+/F1 10 Tf
+1 0 0 1 70 196 Tm
+(Early Termination Fee: $1,500,000.00) Tj
+/F1 10 Tf
+1 0 0 1 70 181 Tm
+(Data Migration Assistance Fee: $250,000.00) Tj
+/F1 11 Tf
+1 0 0 1 60 166 Tm
+(AUM-Based Fees) Tj
+/F1 10 Tf
+1 0 0 1 70 148 Tm
+(tier1: $0 - $1,000,000,000 at 2.5 bps) Tj
+/F1 10 Tf
+1 0 0 1 70 133 Tm
+(tier2: $1,000,000,001 - $5,000,000,000 at 1.5 bps) Tj
+/F1 10 Tf
+1 0 0 1 70 118 Tm
+(tier3: $5,000,000,001 - Unlimited at 0.75 bps) Tj
+/F1 13 Tf
+1 0 0 1 50 91 Tm
+(SERVICE LEVEL) Tj
+/F1 10 Tf
+1 0 0 1 70 69 Tm
+(Guaranteed Uptime: 99.95%) Tj
+ET
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792]
+   /Contents 7 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+7 0 obj
+<< /Length 1318 >>
+stream
+BT
+/F1 11 Tf
+1 0 0 1 60 750 Tm
+(Response Time) Tj
+/F1 10 Tf
+1 0 0 1 70 732 Tm
+(Critical: 15 minutes) Tj
+/F1 10 Tf
+1 0 0 1 70 717 Tm
+(High: 1 hour) Tj
+/F1 10 Tf
+1 0 0 1 70 702 Tm
+(Medium: 4 hours) Tj
+/F1 10 Tf
+1 0 0 1 70 687 Tm
+(Low: 1 business day) Tj
+/F1 10 Tf
+1 0 0 1 70 672 Tm
+(Portfolio Calculation Time: Under 2 seconds) Tj
+/F1 10 Tf
+1 0 0 1 70 657 Tm
+(Report Generation Time: Under 30 seconds) Tj
+/F1 10 Tf
+1 0 0 1 70 642 Tm
+(Maintenance Window: Saturday 23:00-Sunday 05:00 EST) Tj
+/F1 10 Tf
+1 0 0 1 70 627 Tm
+(Data Retention: Lifetime of relationship + 7 years) Tj
+/F1 11 Tf
+1 0 0 1 60 612 Tm
+(Disaster Recovery) Tj
+/F1 10 Tf
+1 0 0 1 70 594 Tm
+(Rpo: 15 minutes) Tj
+/F1 10 Tf
+1 0 0 1 70 579 Tm
+(Rto: 1 hour) Tj
+/F1 10 Tf
+1 0 0 1 70 564 Tm
+(Backup Frequency: Every 15 minutes) Tj
+/F1 10 Tf
+1 0 0 1 70 549 Tm
+(Testing Frequency: Quarterly) Tj
+/F1 13 Tf
+1 0 0 1 50 522 Tm
+(COMPLIANCE) Tj
+/F1 10 Tf
+1 0 0 1 70 500 Tm
+(Regulatory Frameworks: SEC Rule 17a-4, SOC 2 Type II, FINRA, Reg S-P, GDPR) Tj
+/F1 10 Tf
+1 0 0 1 70 485 Tm
+(Audit Frequency: Annual) Tj
+/F1 10 Tf
+1 0 0 1 70 470 Tm
+(Data Classification: Highly Confidential) Tj
+/F1 10 Tf
+1 0 0 1 70 455 Tm
+(Encryption Standard: AES-256-GCM) Tj
+/F1 10 Tf
+1 0 0 1 70 440 Tm
+(Last Audit Date: 2024-06-12) Tj
+/F1 10 Tf
+1 0 0 1 70 425 Tm
+(Fiduciary Compliance: Yes) Tj
+ET
+endstream
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000121 00000 n 
+0000000191 00000 n 
+0000000320 00000 n 
+0000002939 00000 n 
+0000003068 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R >>
+startxref
+4438
+%%EOF

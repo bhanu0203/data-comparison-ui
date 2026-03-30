@@ -1,0 +1,209 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [4 0 R 6 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792]
+   /Contents 5 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+5 0 obj
+<< /Length 2452 >>
+stream
+BT
+/F1 16 Tf
+1 0 0 1 50 750 Tm
+(DIGITAL LENDING PLATFORM AGREEMENT) Tj
+/F1 13 Tf
+1 0 0 1 50 712 Tm
+(AGREEMENT DETAILS) Tj
+/F1 10 Tf
+1 0 0 1 70 690 Tm
+(Agreement ID: AGR-2023-09134) Tj
+/F1 10 Tf
+1 0 0 1 70 675 Tm
+(Type: Digital Lending Platform Agreement) Tj
+/F1 10 Tf
+1 0 0 1 70 660 Tm
+(Status: Active) Tj
+/F1 10 Tf
+1 0 0 1 70 645 Tm
+(Effective Date: 2023-09-15) Tj
+/F1 10 Tf
+1 0 0 1 70 630 Tm
+(Expiration Date: 2026-09-14) Tj
+/F1 10 Tf
+1 0 0 1 70 615 Tm
+(Auto-Renewal: Yes) Tj
+/F1 13 Tf
+1 0 0 1 50 588 Tm
+(PARTIES) Tj
+/F1 11 Tf
+1 0 0 1 60 566 Tm
+(Bank / Financial Institution) Tj
+/F1 10 Tf
+1 0 0 1 70 548 Tm
+(Name: Frontier Savings & Loan) Tj
+/F1 10 Tf
+1 0 0 1 70 533 Tm
+(Registration Number: BNK-228764) Tj
+/F1 10 Tf
+1 0 0 1 70 518 Tm
+(Jurisdiction: State of Texas) Tj
+/F1 10 Tf
+1 0 0 1 70 503 Tm
+(Address: 2100 Ross Avenue, Suite 800, Dallas, TX 75201, United States) Tj
+/F1 10 Tf
+1 0 0 1 70 488 Tm
+(Signatory: Michael T. Crawford, Chief Lending Officer) Tj
+/F1 11 Tf
+1 0 0 1 60 461 Tm
+(Third Party / Vendor) Tj
+/F1 10 Tf
+1 0 0 1 70 443 Tm
+(Name: LendFlow Technologies Inc.) Tj
+/F1 10 Tf
+1 0 0 1 70 428 Tm
+(Registration Number: LFT-2019-33291) Tj
+/F1 10 Tf
+1 0 0 1 70 413 Tm
+(Jurisdiction: State of Utah) Tj
+/F1 10 Tf
+1 0 0 1 70 398 Tm
+(Address: 6975 Union Park Center, Suite 600, Cottonwood Heights, UT 84047, United States) Tj
+/F1 10 Tf
+1 0 0 1 70 383 Tm
+(Signatory: Patricia Fernandez, COO) Tj
+/F1 10 Tf
+1 0 0 1 70 368 Tm
+(Contact Email: p.fernandez@lendflow.io) Tj
+/F1 13 Tf
+1 0 0 1 50 341 Tm
+(FINANCIAL TERMS) Tj
+/F1 10 Tf
+1 0 0 1 70 319 Tm
+(Currency: USD) Tj
+/F1 10 Tf
+1 0 0 1 70 304 Tm
+(Platform Fee: $95,000.00) Tj
+/F1 10 Tf
+1 0 0 1 70 289 Tm
+(Billing Cycle: Monthly) Tj
+/F1 10 Tf
+1 0 0 1 70 274 Tm
+(Payment Terms: Net 30) Tj
+/F1 11 Tf
+1 0 0 1 60 259 Tm
+(Penalties) Tj
+/F1 10 Tf
+1 0 0 1 70 241 Tm
+(Late Payment Rate: 1.5%) Tj
+/F1 10 Tf
+1 0 0 1 70 226 Tm
+(Early Termination Fee: $300,000.00) Tj
+/F1 10 Tf
+1 0 0 1 70 211 Tm
+(Regulatory Violation Penalty: $500,000.00) Tj
+/F1 11 Tf
+1 0 0 1 60 196 Tm
+(Revenue Share) Tj
+/F1 10 Tf
+1 0 0 1 70 178 Tm
+(Origination Fee Share: 15%) Tj
+/F1 10 Tf
+1 0 0 1 70 163 Tm
+(Interest Income Share: 2%) Tj
+/F1 10 Tf
+1 0 0 1 70 148 Tm
+(Late Fee Split: 10%) Tj
+/F1 10 Tf
+1 0 0 1 70 133 Tm
+(Loan Volume Minimum: $10,000,000.00) Tj
+/F1 13 Tf
+1 0 0 1 50 106 Tm
+(SERVICE LEVEL) Tj
+/F1 10 Tf
+1 0 0 1 70 84 Tm
+(Guaranteed Uptime: 99.95%) Tj
+/F1 10 Tf
+1 0 0 1 70 69 Tm
+(Application Processing Time: Under 3 seconds) Tj
+ET
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792]
+   /Contents 7 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+7 0 obj
+<< /Length 964 >>
+stream
+BT
+/F1 10 Tf
+1 0 0 1 70 750 Tm
+(Decision Engine Latency: Under 500ms) Tj
+/F1 10 Tf
+1 0 0 1 70 735 Tm
+(Document Generation Time: Under 10 seconds) Tj
+/F1 10 Tf
+1 0 0 1 70 720 Tm
+(Maintenance Window: Sunday 02:00-04:00 CST) Tj
+/F1 10 Tf
+1 0 0 1 70 705 Tm
+(Data Retention: 7 years post-loan maturity) Tj
+/F1 11 Tf
+1 0 0 1 60 690 Tm
+(Disaster Recovery) Tj
+/F1 10 Tf
+1 0 0 1 70 672 Tm
+(Rpo: 1 hour) Tj
+/F1 10 Tf
+1 0 0 1 70 657 Tm
+(Rto: 4 hours) Tj
+/F1 10 Tf
+1 0 0 1 70 642 Tm
+(Backup Frequency: Every 6 hours) Tj
+/F1 13 Tf
+1 0 0 1 50 615 Tm
+(COMPLIANCE) Tj
+/F1 10 Tf
+1 0 0 1 70 593 Tm
+(Regulatory Frameworks: TILA, RESPA, ECOA, HMDA, SOC 2 Type II, CCPA) Tj
+/F1 10 Tf
+1 0 0 1 70 578 Tm
+(Audit Frequency: Annual) Tj
+/F1 10 Tf
+1 0 0 1 70 563 Tm
+(Data Classification: Confidential) Tj
+/F1 10 Tf
+1 0 0 1 70 548 Tm
+(Encryption Standard: AES-256) Tj
+/F1 10 Tf
+1 0 0 1 70 533 Tm
+(Last Audit Date: 2023-11-30) Tj
+/F1 10 Tf
+1 0 0 1 70 518 Tm
+(Fair Lending Compliance: Yes) Tj
+ET
+endstream
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000121 00000 n 
+0000000191 00000 n 
+0000000320 00000 n 
+0000002824 00000 n 
+0000002953 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R >>
+startxref
+3968
+%%EOF

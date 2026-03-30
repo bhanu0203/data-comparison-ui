@@ -78,6 +78,33 @@
   animation: pulse-soft 2s ease-in-out infinite;
 }
 
+@keyframes progress-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-progress-pulse {
+  animation: progress-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes ready-pulse {
+  0%, 100% { box-shadow: 0 4px 14px -3px oklch(0.527 0.154 262.13 / 0.25); }
+  50% { box-shadow: 0 8px 25px -3px oklch(0.527 0.154 262.13 / 0.45); }
+}
+
+.animate-ready-pulse {
+  animation: ready-pulse 2s ease-in-out infinite;
+}
+
+@keyframes ready-glow {
+  0%, 100% { border-color: oklch(0.527 0.154 262.13 / 0.4); }
+  50% { border-color: oklch(0.527 0.154 262.13 / 0.7); }
+}
+
+.animate-ready-glow {
+  animation: ready-glow 2.5s ease-in-out infinite;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;

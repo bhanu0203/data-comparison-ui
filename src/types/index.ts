@@ -49,3 +49,62 @@ export interface ComparisonResult {
   systemOneData: ExtractionResult
   systemTwoData: ExtractionResult
 }
+
+// ── Backend types ──
+
+export interface Agreement {
+  id: number
+  agreement_id: string
+  name: string
+  field_count: number
+  created_at: string
+  updated_at: string
+}
+
+export interface AgreementDetail extends Agreement {
+  json_data: Record<string, unknown>
+}
+
+export type RunStatus = 'queued' | 'processing' | 'completed' | 'failed'
+
+export type RunStage =
+  | 'queued'
+  | 'uploading'
+  | 'pdf_parsing'
+  | 'metadata_mapping'
+  | 'llm_extraction'
+  | 'response_validation'
+  | 'diff_computation'
+  | 'report_generation'
+  | 'completed'
+
+export interface ComparisonRun {
+  id: number
+  agreement_id: number
+  agreement_display_id: string | null
+  agreement_name: string | null
+  run_name: string | null
+  status: RunStatus
+  current_stage: RunStage
+  progress_percentage: number
+  match_percentage: number | null
+  created_at: string
+  started_at: string | null
+  completed_at: string | null
+  error_message: string | null
+}
+
+export interface ComparisonRunDetail extends ComparisonRun {
+  system_one_result: Record<string, unknown> | null
+  system_two_data: Record<string, unknown> | null
+  metadata_construct: Record<string, unknown> | null
+}
+
+export interface RunProgress {
+  id: number
+  status: RunStatus
+  current_stage: RunStage
+  progress_percentage: number
+  match_percentage: number | null
+  error_message: string | null
+}

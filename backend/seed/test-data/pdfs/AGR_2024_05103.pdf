@@ -1,0 +1,227 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [4 0 R 6 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792]
+   /Contents 5 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+5 0 obj
+<< /Length 2530 >>
+stream
+BT
+/F1 16 Tf
+1 0 0 1 50 750 Tm
+(CLOUD INFRASTRUCTURE HOSTING AGREEMENT) Tj
+/F1 13 Tf
+1 0 0 1 50 712 Tm
+(AGREEMENT DETAILS) Tj
+/F1 10 Tf
+1 0 0 1 70 690 Tm
+(Agreement ID: AGR-2024-05103) Tj
+/F1 10 Tf
+1 0 0 1 70 675 Tm
+(Type: Cloud Infrastructure Hosting Agreement) Tj
+/F1 10 Tf
+1 0 0 1 70 660 Tm
+(Status: Active) Tj
+/F1 10 Tf
+1 0 0 1 70 645 Tm
+(Effective Date: 2024-05-01) Tj
+/F1 10 Tf
+1 0 0 1 70 630 Tm
+(Expiration Date: 2027-04-30) Tj
+/F1 10 Tf
+1 0 0 1 70 615 Tm
+(Auto-Renewal: No) Tj
+/F1 13 Tf
+1 0 0 1 50 588 Tm
+(PARTIES) Tj
+/F1 11 Tf
+1 0 0 1 60 566 Tm
+(Bank / Financial Institution) Tj
+/F1 10 Tf
+1 0 0 1 70 548 Tm
+(Name: Pinnacle Bank & Trust) Tj
+/F1 10 Tf
+1 0 0 1 70 533 Tm
+(Registration Number: BNK-776213) Tj
+/F1 10 Tf
+1 0 0 1 70 518 Tm
+(Jurisdiction: State of Tennessee) Tj
+/F1 10 Tf
+1 0 0 1 70 503 Tm
+(Address: 150 Third Avenue South, Nashville, TN 37201, United States) Tj
+/F1 10 Tf
+1 0 0 1 70 488 Tm
+(Signatory: William S. Donovan, Chief Technology Officer) Tj
+/F1 11 Tf
+1 0 0 1 60 461 Tm
+(Third Party / Vendor) Tj
+/F1 10 Tf
+1 0 0 1 70 443 Tm
+(Name: FinCloud Infrastructure Services) Tj
+/F1 10 Tf
+1 0 0 1 70 428 Tm
+(Registration Number: FCI-2020-41208) Tj
+/F1 10 Tf
+1 0 0 1 70 413 Tm
+(Jurisdiction: State of Washington) Tj
+/F1 10 Tf
+1 0 0 1 70 398 Tm
+(Address: 410 Terry Avenue North, Seattle, WA 98109, United States) Tj
+/F1 10 Tf
+1 0 0 1 70 383 Tm
+(Signatory: Anika Patel, VP Financial Services) Tj
+/F1 10 Tf
+1 0 0 1 70 368 Tm
+(Contact Email: a.patel@fincloud.com) Tj
+/F1 13 Tf
+1 0 0 1 50 341 Tm
+(FINANCIAL TERMS) Tj
+/F1 10 Tf
+1 0 0 1 70 319 Tm
+(Currency: USD) Tj
+/F1 10 Tf
+1 0 0 1 70 304 Tm
+(Monthly Commit: $165,000.00) Tj
+/F1 10 Tf
+1 0 0 1 70 289 Tm
+(Billing Cycle: Monthly) Tj
+/F1 10 Tf
+1 0 0 1 70 274 Tm
+(Payment Terms: Net 30) Tj
+/F1 11 Tf
+1 0 0 1 60 259 Tm
+(Penalties) Tj
+/F1 10 Tf
+1 0 0 1 70 241 Tm
+(Late Payment Rate: 1.5%) Tj
+/F1 10 Tf
+1 0 0 1 70 226 Tm
+(Early Termination Fee: $500,000.00) Tj
+/F1 10 Tf
+1 0 0 1 70 211 Tm
+(Data Loss Penalty: $5,000,000.00) Tj
+/F1 11 Tf
+1 0 0 1 60 196 Tm
+(Compute Costs) Tj
+/F1 10 Tf
+1 0 0 1 70 178 Tm
+(Vcpu Per Hour: $0.04) Tj
+/F1 10 Tf
+1 0 0 1 70 163 Tm
+(Memory Gbper Hour: $0.01) Tj
+/F1 10 Tf
+1 0 0 1 70 148 Tm
+(Gpu Per Hour: $2.10) Tj
+/F1 11 Tf
+1 0 0 1 60 133 Tm
+(Storage Costs) Tj
+/F1 10 Tf
+1 0 0 1 70 115 Tm
+(Ssd Per Gbmonth: $0.10) Tj
+/F1 10 Tf
+1 0 0 1 70 100 Tm
+(Hdd Per Gbmonth: $0.02) Tj
+/F1 10 Tf
+1 0 0 1 70 85 Tm
+(Archive Per Gbmonth: $0.00) Tj
+/F1 10 Tf
+1 0 0 1 70 70 Tm
+(Egress Per Gb: $0.08) Tj
+/F1 10 Tf
+1 0 0 1 70 55 Tm
+(Reserved Instance Discount: 35%) Tj
+ET
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792]
+   /Contents 7 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+7 0 obj
+<< /Length 1327 >>
+stream
+BT
+/F1 13 Tf
+1 0 0 1 50 738 Tm
+(SERVICE LEVEL) Tj
+/F1 10 Tf
+1 0 0 1 70 716 Tm
+(Guaranteed Uptime: 99.999%) Tj
+/F1 10 Tf
+1 0 0 1 70 701 Tm
+(Network Latency: Under 1ms within region) Tj
+/F1 10 Tf
+1 0 0 1 70 686 Tm
+(Storage Iops: Minimum 64000 per volume) Tj
+/F1 10 Tf
+1 0 0 1 70 671 Tm
+(Maintenance Window: Live migration \(zero downtime\)) Tj
+/F1 10 Tf
+1 0 0 1 70 656 Tm
+(Data Retention: Per customer policy) Tj
+/F1 11 Tf
+1 0 0 1 60 641 Tm
+(Disaster Recovery) Tj
+/F1 10 Tf
+1 0 0 1 70 623 Tm
+(Rpo: Configurable \(1 min - 24 hr\)) Tj
+/F1 10 Tf
+1 0 0 1 70 608 Tm
+(Rto: Under 15 minutes) Tj
+/F1 10 Tf
+1 0 0 1 70 593 Tm
+(Backup Frequency: Continuous snapshot) Tj
+/F1 10 Tf
+1 0 0 1 70 578 Tm
+(Geo Redundancy: Yes) Tj
+/F1 10 Tf
+1 0 0 1 70 563 Tm
+(Regions: us-east-1, us-west-2, eu-west-1) Tj
+/F1 13 Tf
+1 0 0 1 50 536 Tm
+(COMPLIANCE) Tj
+/F1 10 Tf
+1 0 0 1 70 514 Tm
+(Regulatory Frameworks: SOC 2 Type II, SOC 3, ISO 27001, FedRAMP High, PCI DSS) Tj
+/F1 10 Tf
+1 0 0 1 70 499 Tm
+(Audit Frequency: Continuous \(automated\)) Tj
+/F1 10 Tf
+1 0 0 1 70 484 Tm
+(Data Classification: Multi-tenant Isolation) Tj
+/F1 10 Tf
+1 0 0 1 70 469 Tm
+(Encryption Standard: AES-256-GCM \(at rest\) + TLS 1.3 \(in transit\)) Tj
+/F1 10 Tf
+1 0 0 1 70 454 Tm
+(Last Audit Date: 2024-04-15) Tj
+/F1 10 Tf
+1 0 0 1 70 439 Tm
+(Key Management: Customer-managed HSM) Tj
+ET
+endstream
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000121 00000 n 
+0000000191 00000 n 
+0000000320 00000 n 
+0000002902 00000 n 
+0000003031 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R >>
+startxref
+4410
+%%EOF

@@ -1,10 +1,32 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useEffect } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { FileUp, FileText, X, CheckCircle2, FlaskConical } from 'lucide-react'
+import { FileUp, FileText, X, CheckCircle2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
-import { createSamplePdf } from '@/lib/mock-service'
+
+function extractPdfText(file: File): Promise<string[]> {
+  return new Promise((resolve) => {
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      const text = e.target?.result
+      if (typeof text !== 'string') { resolve([]); return }
+      // Extract text between BT...ET blocks from PDF stream
+      const lines: string[] = []
+      const matches = text.matchAll(/\(([^)]*)\)\s*Tj/g)
+      for (const m of matches) {
+        const line = m[1]
+          .replace(/\\\(/g, '(')
+          .replace(/\\\)/g, ')')
+          .replace(/\\\\/g, '\\')
+          .trim()
+        if (line) lines.push(line)
+      }
+      resolve(lines)
+    }
+    reader.readAsText(file)
+  })
+}
 
 interface PdfUploadProps {
   onFileSelect: (file: File) => void
@@ -13,6 +35,12 @@ interface PdfUploadProps {
 
 export function PdfUpload({ onFileSelect, selectedFile }: PdfUploadProps) {
   const [isDragActive, setIsDragActive] = useState(false)
+  const [previewLines, setPreviewLines] = useState<string[]>([])
+
+  useEffect(() => {
+    if (!selectedFile) { setPreviewLines([]); return }
+    extractPdfText(selectedFile).then(setPreviewLines)
+  }, [selectedFile])
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
@@ -28,11 +56,6 @@ export function PdfUpload({ onFileSelect, selectedFile }: PdfUploadProps) {
     onDragEnter: () => setIsDragActive(true),
     onDragLeave: () => setIsDragActive(false),
   })
-
-  const handleLoadSample = () => {
-    const sampleFile = createSamplePdf()
-    onFileSelect(sampleFile)
-  }
 
   return (
     <Card className="overflow-hidden">
@@ -84,25 +107,6 @@ export function PdfUpload({ onFileSelect, selectedFile }: PdfUploadProps) {
               </div>
             </div>
 
-            {/* Sample PDF loader */}
-            <div className="flex items-center gap-3 p-3 rounded-xl bg-amber-50 border border-amber-200/60">
-              <div className="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center flex-shrink-0">
-                <FlaskConical className="w-4 h-4 text-amber-600" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-xs font-medium text-amber-800">Test Mode</p>
-                <p className="text-xs text-amber-600">Load a sample agreement PDF for testing</p>
-              </div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleLoadSample}
-                className="flex-shrink-0 border-amber-300 text-amber-700 hover:bg-amber-100 hover:text-amber-800 gap-1.5"
-              >
-                <FlaskConical className="w-3 h-3" />
-                Load Sample PDF
-              </Button>
-            </div>
           </div>
         ) : (
           <div className="space-y-3">
@@ -132,17 +136,27 @@ export function PdfUpload({ onFileSelect, selectedFile }: PdfUploadProps) {
             {/* PDF preview card */}
             <div className="rounded-xl border bg-muted/30 p-4">
               <p className="text-xs font-medium text-muted-foreground mb-2 uppercase tracking-wider">Document Preview</p>
-              <div className="bg-white rounded-lg border p-4 space-y-2 font-mono text-xs text-foreground/80">
-                <p className="font-bold text-sm text-foreground">SERVICE LEVEL AGREEMENT</p>
-                <div className="h-px bg-border my-2" />
-                <p>Agreement ID: AGR-2024-00847</p>
-                <p>Parties: First National Bank Corp &harr; TechServe Solutions Inc.</p>
-                <p>Effective: 2024-01-15 | Expires: 2026-01-14</p>
-                <p>Base Fee: $250,000 USD (Monthly)</p>
-                <p>Uptime SLA: 99.95%</p>
-                <p>Compliance: SOC 2 Type II, PCI DSS, GDPR, CCPA</p>
-                <div className="h-px bg-border my-2" />
-                <p className="text-muted-foreground italic">... 12 pages total</p>
+              <div className="bg-white rounded-lg border p-4 space-y-1 font-mono text-xs text-foreground/80 max-h-64 overflow-y-auto diff-scroll">
+                {previewLines.length > 0 ? (
+                  previewLines.map((line, i) => {
+                    // Detect section headings (all-caps lines)
+                    const isHeading = /^[A-Z /&]+$/.test(line) && line.length > 3
+                    const isSubheading = /^[A-Z][a-z].*[/A-Z]/.test(line) && !line.includes(':')
+                    return (
+                      <p
+                        key={i}
+                        className={cn(
+                          isHeading && 'font-bold text-sm text-foreground mt-2',
+                          isSubheading && !isHeading && 'font-semibold text-foreground mt-1.5',
+                        )}
+                      >
+                        {line}
+                      </p>
+                    )
+                  })
+                ) : (
+                  <p className="text-muted-foreground italic">Unable to extract text preview</p>
+                )}
               </div>
             </div>
           </div>

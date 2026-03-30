@@ -1,0 +1,215 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [4 0 R 6 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792]
+   /Contents 5 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+5 0 obj
+<< /Length 2525 >>
+stream
+BT
+/F1 16 Tf
+1 0 0 1 50 750 Tm
+(DATA PROCESSING AGREEMENT) Tj
+/F1 13 Tf
+1 0 0 1 50 712 Tm
+(AGREEMENT DETAILS) Tj
+/F1 10 Tf
+1 0 0 1 70 690 Tm
+(Agreement ID: AGR-2024-01293) Tj
+/F1 10 Tf
+1 0 0 1 70 675 Tm
+(Type: Data Processing Agreement) Tj
+/F1 10 Tf
+1 0 0 1 70 660 Tm
+(Status: Active) Tj
+/F1 10 Tf
+1 0 0 1 70 645 Tm
+(Effective Date: 2024-03-01) Tj
+/F1 10 Tf
+1 0 0 1 70 630 Tm
+(Expiration Date: 2027-02-28) Tj
+/F1 10 Tf
+1 0 0 1 70 615 Tm
+(Auto-Renewal: No) Tj
+/F1 13 Tf
+1 0 0 1 50 588 Tm
+(PARTIES) Tj
+/F1 11 Tf
+1 0 0 1 60 566 Tm
+(Bank / Financial Institution) Tj
+/F1 10 Tf
+1 0 0 1 70 548 Tm
+(Name: Summit National Bank) Tj
+/F1 10 Tf
+1 0 0 1 70 533 Tm
+(Registration Number: BNK-551034) Tj
+/F1 10 Tf
+1 0 0 1 70 518 Tm
+(Jurisdiction: State of New York) Tj
+/F1 10 Tf
+1 0 0 1 70 503 Tm
+(Address: 350 Park Avenue, 22nd Floor, New York, NY 10022, United States) Tj
+/F1 10 Tf
+1 0 0 1 70 488 Tm
+(Signatory: Margaret A. Hoffman, Chief Data Officer) Tj
+/F1 11 Tf
+1 0 0 1 60 461 Tm
+(Third Party / Vendor) Tj
+/F1 10 Tf
+1 0 0 1 70 443 Tm
+(Name: CloudVault Analytics LLC) Tj
+/F1 10 Tf
+1 0 0 1 70 428 Tm
+(Registration Number: CVA-2021-78431) Tj
+/F1 10 Tf
+1 0 0 1 70 413 Tm
+(Jurisdiction: State of Virginia) Tj
+/F1 10 Tf
+1 0 0 1 70 398 Tm
+(Address: 1850 Tysons Boulevard, Suite 400, McLean, VA 22102, United States) Tj
+/F1 10 Tf
+1 0 0 1 70 383 Tm
+(Signatory: David R. Kowalski, Chief Revenue Officer) Tj
+/F1 10 Tf
+1 0 0 1 70 368 Tm
+(Contact Email: d.kowalski@cloudvault.io) Tj
+/F1 13 Tf
+1 0 0 1 50 341 Tm
+(FINANCIAL TERMS) Tj
+/F1 10 Tf
+1 0 0 1 70 319 Tm
+(Currency: USD) Tj
+/F1 10 Tf
+1 0 0 1 70 304 Tm
+(Base Fee: $185,000.00) Tj
+/F1 10 Tf
+1 0 0 1 70 289 Tm
+(Billing Cycle: Quarterly) Tj
+/F1 10 Tf
+1 0 0 1 70 274 Tm
+(Payment Terms: Net 45) Tj
+/F1 11 Tf
+1 0 0 1 60 259 Tm
+(Penalties) Tj
+/F1 10 Tf
+1 0 0 1 70 241 Tm
+(Late Payment Rate: 2.0%) Tj
+/F1 10 Tf
+1 0 0 1 70 226 Tm
+(Early Termination Fee: $400,000.00) Tj
+/F1 10 Tf
+1 0 0 1 70 211 Tm
+(Data Breach Penalty: $1,000,000.00) Tj
+/F1 11 Tf
+1 0 0 1 60 196 Tm
+(Volume Tiers) Tj
+/F1 10 Tf
+1 0 0 1 70 178 Tm
+(Tier 1: Min Records: 0, Max Records: 5000000, Cost Per Million: 1200) Tj
+/F1 10 Tf
+1 0 0 1 70 163 Tm
+(Tier 2: Min Records: 5000001, Max Records: 25000000, Cost Per Million: 900) Tj
+/F1 10 Tf
+1 0 0 1 70 148 Tm
+(Tier 3: Min Records: 25000001, Max Records: None, Cost Per Million: 650) Tj
+/F1 13 Tf
+1 0 0 1 50 121 Tm
+(SERVICE LEVEL) Tj
+/F1 10 Tf
+1 0 0 1 70 99 Tm
+(Guaranteed Uptime: 99.99%) Tj
+/F1 11 Tf
+1 0 0 1 60 84 Tm
+(Response Time) Tj
+/F1 10 Tf
+1 0 0 1 70 66 Tm
+(Critical: 5 minutes) Tj
+ET
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792]
+   /Contents 7 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+7 0 obj
+<< /Length 1005 >>
+stream
+BT
+/F1 10 Tf
+1 0 0 1 70 750 Tm
+(High: 30 minutes) Tj
+/F1 10 Tf
+1 0 0 1 70 735 Tm
+(Medium: 2 hours) Tj
+/F1 10 Tf
+1 0 0 1 70 720 Tm
+(Low: 8 hours) Tj
+/F1 10 Tf
+1 0 0 1 70 705 Tm
+(Maintenance Window: Saturday 01:00-05:00 EST) Tj
+/F1 10 Tf
+1 0 0 1 70 690 Tm
+(Data Retention: 10 years) Tj
+/F1 11 Tf
+1 0 0 1 60 675 Tm
+(Disaster Recovery) Tj
+/F1 10 Tf
+1 0 0 1 70 657 Tm
+(Rpo: 15 minutes) Tj
+/F1 10 Tf
+1 0 0 1 70 642 Tm
+(Rto: 1 hour) Tj
+/F1 10 Tf
+1 0 0 1 70 627 Tm
+(Backup Frequency: Continuous) Tj
+/F1 10 Tf
+1 0 0 1 70 612 Tm
+(Testing Frequency: Monthly) Tj
+/F1 13 Tf
+1 0 0 1 50 585 Tm
+(COMPLIANCE) Tj
+/F1 10 Tf
+1 0 0 1 70 563 Tm
+(Regulatory Frameworks: SOC 2 Type II, PCI DSS, GDPR, CCPA, GLBA) Tj
+/F1 10 Tf
+1 0 0 1 70 548 Tm
+(Audit Frequency: Semi-Annual) Tj
+/F1 10 Tf
+1 0 0 1 70 533 Tm
+(Data Classification: Restricted) Tj
+/F1 10 Tf
+1 0 0 1 70 518 Tm
+(Encryption Standard: AES-256-GCM) Tj
+/F1 10 Tf
+1 0 0 1 70 503 Tm
+(Last Audit Date: 2024-01-15) Tj
+/F1 10 Tf
+1 0 0 1 70 488 Tm
+(Data Residency: US-only) Tj
+ET
+endstream
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000121 00000 n 
+0000000191 00000 n 
+0000000320 00000 n 
+0000002897 00000 n 
+0000003026 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R >>
+startxref
+4083
+%%EOF

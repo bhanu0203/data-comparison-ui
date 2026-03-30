@@ -1,0 +1,264 @@
+{
+  "name": "Managed Security Services Extraction Schema",
+  "version": "1.0",
+  "fields": [
+    {
+      "fieldName": "Agreement ID",
+      "jsonPath": "agreement.id",
+      "description": "Unique identifier for the agreement",
+      "type": "string"
+    },
+    {
+      "fieldName": "Agreement Type",
+      "jsonPath": "agreement.type",
+      "description": "Type/category of the agreement",
+      "type": "string"
+    },
+    {
+      "fieldName": "Status",
+      "jsonPath": "agreement.status",
+      "description": "Current status of the agreement",
+      "type": "string"
+    },
+    {
+      "fieldName": "Effective Date",
+      "jsonPath": "agreement.effectiveDate",
+      "description": "Date the agreement becomes effective",
+      "type": "date"
+    },
+    {
+      "fieldName": "Expiration Date",
+      "jsonPath": "agreement.expirationDate",
+      "description": "Date the agreement expires",
+      "type": "date"
+    },
+    {
+      "fieldName": "Auto Renewal",
+      "jsonPath": "agreement.autoRenewal",
+      "description": "Whether the agreement auto-renews",
+      "type": "boolean"
+    },
+    {
+      "fieldName": "Bank Name",
+      "jsonPath": "parties.bank.name",
+      "description": "Legal name of the bank entity",
+      "type": "string"
+    },
+    {
+      "fieldName": "Bank Registration",
+      "jsonPath": "parties.bank.registrationNumber",
+      "description": "Bank registration/license number",
+      "type": "string"
+    },
+    {
+      "fieldName": "Bank Jurisdiction",
+      "jsonPath": "parties.bank.jurisdiction",
+      "description": "Legal jurisdiction of the bank",
+      "type": "string"
+    },
+    {
+      "fieldName": "Bank Address",
+      "jsonPath": "parties.bank.address",
+      "description": "Full address of the bank",
+      "type": "object"
+    },
+    {
+      "fieldName": "Bank Signatory",
+      "jsonPath": "parties.bank.signatoryName",
+      "description": "Name of the bank signatory",
+      "type": "string"
+    },
+    {
+      "fieldName": "Bank Signatory Title",
+      "jsonPath": "parties.bank.signatoryTitle",
+      "description": "Title of the bank signatory",
+      "type": "string"
+    },
+    {
+      "fieldName": "Third Party Name",
+      "jsonPath": "parties.thirdParty.name",
+      "description": "Legal name of the third-party entity",
+      "type": "string"
+    },
+    {
+      "fieldName": "Third Party Registration",
+      "jsonPath": "parties.thirdParty.registrationNumber",
+      "description": "Third party registration number",
+      "type": "string"
+    },
+    {
+      "fieldName": "Third Party Jurisdiction",
+      "jsonPath": "parties.thirdParty.jurisdiction",
+      "description": "Legal jurisdiction of the third party",
+      "type": "string"
+    },
+    {
+      "fieldName": "Third Party Address",
+      "jsonPath": "parties.thirdParty.address",
+      "description": "Full address of the third party",
+      "type": "object"
+    },
+    {
+      "fieldName": "Third Party Signatory",
+      "jsonPath": "parties.thirdParty.signatoryName",
+      "description": "Name of the third-party signatory",
+      "type": "string"
+    },
+    {
+      "fieldName": "Third Party Contact Email",
+      "jsonPath": "parties.thirdParty.contactEmail",
+      "description": "Contact email for the third party",
+      "type": "string"
+    },
+    {
+      "fieldName": "Currency",
+      "jsonPath": "financialTerms.currency",
+      "description": "Currency for financial terms",
+      "type": "string"
+    },
+    {
+      "fieldName": "Base Fee",
+      "jsonPath": "financialTerms.baseFee",
+      "description": "Base/platform fee amount",
+      "type": "number"
+    },
+    {
+      "fieldName": "Billing Cycle",
+      "jsonPath": "financialTerms.billingCycle",
+      "description": "Frequency of billing",
+      "type": "string"
+    },
+    {
+      "fieldName": "Payment Terms",
+      "jsonPath": "financialTerms.paymentTerms",
+      "description": "Payment due terms",
+      "type": "string"
+    },
+    {
+      "fieldName": "Late Payment Rate",
+      "jsonPath": "financialTerms.penalties.latePaymentRate",
+      "description": "Late payment interest rate (%)",
+      "type": "number"
+    },
+    {
+      "fieldName": "Early Termination Fee",
+      "jsonPath": "financialTerms.penalties.earlyTerminationFee",
+      "description": "Fee for early contract termination",
+      "type": "number"
+    },
+    {
+      "fieldName": "Uptime SLA",
+      "jsonPath": "serviceLevel.uptime",
+      "description": "Guaranteed uptime percentage",
+      "type": "number"
+    },
+    {
+      "fieldName": "Response Times",
+      "jsonPath": "serviceLevel.responseTime",
+      "description": "SLA response times by severity",
+      "type": "object"
+    },
+    {
+      "fieldName": "Maintenance Window",
+      "jsonPath": "serviceLevel.maintenanceWindow",
+      "description": "Scheduled maintenance window",
+      "type": "string"
+    },
+    {
+      "fieldName": "Data Retention",
+      "jsonPath": "serviceLevel.dataRetention",
+      "description": "Data retention period",
+      "type": "string"
+    },
+    {
+      "fieldName": "Disaster Recovery",
+      "jsonPath": "serviceLevel.disasterRecovery",
+      "description": "DR configuration (RPO/RTO/backups)",
+      "type": "object"
+    },
+    {
+      "fieldName": "Regulatory Frameworks",
+      "jsonPath": "compliance.regulatoryFrameworks",
+      "description": "Applicable regulatory frameworks",
+      "type": "array"
+    },
+    {
+      "fieldName": "Audit Frequency",
+      "jsonPath": "compliance.auditFrequency",
+      "description": "How often audits are conducted",
+      "type": "string"
+    },
+    {
+      "fieldName": "Data Classification",
+      "jsonPath": "compliance.dataClassification",
+      "description": "Security classification of data",
+      "type": "string"
+    },
+    {
+      "fieldName": "Encryption Standard",
+      "jsonPath": "compliance.encryptionStandard",
+      "description": "Encryption algorithm/standard used",
+      "type": "string"
+    },
+    {
+      "fieldName": "Last Audit Date",
+      "jsonPath": "compliance.lastAuditDate",
+      "description": "Date of the most recent audit",
+      "type": "date"
+    },
+    {
+      "fieldName": "Monitoring Coverage",
+      "jsonPath": "serviceLevel.monitoringCoverage",
+      "description": "Security monitoring availability",
+      "type": "string"
+    },
+    {
+      "fieldName": "Incident Response Time",
+      "jsonPath": "serviceLevel.incidentResponseTime",
+      "description": "Incident response SLAs by severity",
+      "type": "object"
+    },
+    {
+      "fieldName": "Threat Detection SLA",
+      "jsonPath": "serviceLevel.threatDetectionSLA",
+      "description": "Max time to detect threats",
+      "type": "string"
+    },
+    {
+      "fieldName": "False Positive Rate",
+      "jsonPath": "serviceLevel.falsePositiveRate",
+      "description": "Max acceptable false positive rate",
+      "type": "string"
+    },
+    {
+      "fieldName": "Penetration Testing Fee",
+      "jsonPath": "financialTerms.additionalServices.penetrationTesting",
+      "description": "Annual pen test fee",
+      "type": "number"
+    },
+    {
+      "fieldName": "Red Team Exercise Fee",
+      "jsonPath": "financialTerms.additionalServices.redTeamExercise",
+      "description": "Red team exercise fee",
+      "type": "number"
+    },
+    {
+      "fieldName": "Threat Intel Feed Fee",
+      "jsonPath": "financialTerms.additionalServices.threatIntelFeed",
+      "description": "Annual threat intel subscription",
+      "type": "number"
+    },
+    {
+      "fieldName": "Clearance Level",
+      "jsonPath": "compliance.clearanceLevel",
+      "description": "Security clearance or certification level",
+      "type": "string"
+    },
+    {
+      "fieldName": "Incident Response SLA Breach Penalty",
+      "jsonPath": "financialTerms.penalties.incidentResponseSLA_breach",
+      "description": "Penalty for breaching IR SLAs",
+      "type": "number"
+    }
+  ]
+}

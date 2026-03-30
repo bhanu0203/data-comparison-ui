@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Plus, Trash2, ChevronDown, ChevronUp, Braces } from 'lucide-react'
+import { useState, useRef } from 'react'
+import { Plus, Trash2, ChevronDown, ChevronUp, Braces, Upload, AlertCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import type { MetadataConstruct, MetadataField } from '@/types'
@@ -12,6 +12,37 @@ interface MetadataEditorProps {
 export function MetadataEditor({ metadata, onChange }: MetadataEditorProps) {
   const [expanded, setExpanded] = useState(true)
   const [editingIndex, setEditingIndex] = useState<number | null>(null)
+  const [importError, setImportError] = useState<string | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const handleImportFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setImportError(null)
+    const file = e.target.files?.[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = (ev) => {
+      try {
+        const parsed = JSON.parse(ev.target?.result as string)
+        // Support both full construct format { name, version, fields } and bare fields array
+        if (parsed.fields && Array.isArray(parsed.fields)) {
+          onChange({
+            name: parsed.name || metadata.name,
+            version: parsed.version || metadata.version,
+            fields: parsed.fields,
+          })
+        } else if (Array.isArray(parsed)) {
+          onChange({ ...metadata, fields: parsed })
+        } else {
+          setImportError('JSON must have a "fields" array or be an array of field objects')
+        }
+      } catch {
+        setImportError('Invalid JSON file')
+      }
+    }
+    reader.readAsText(file)
+    // Reset input so same file can be re-imported
+    if (fileInputRef.current) fileInputRef.current.value = ''
+  }
 
   const updateField = (index: number, updates: Partial<MetadataField>) => {
     const newFields = [...metadata.fields]
@@ -48,17 +79,39 @@ export function MetadataEditor({ metadata, onChange }: MetadataEditorProps) {
               Define fields to extract from the PDF
             </CardDescription>
           </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setExpanded(!expanded)}
-          >
-            {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-          </Button>
+          <div className="flex items-center gap-1">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".json"
+              className="hidden"
+              onChange={handleImportFile}
+            />
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-1.5"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <Upload className="w-3 h-3" /> Import JSON
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setExpanded(!expanded)}
+            >
+              {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+            </Button>
+          </div>
         </div>
       </CardHeader>
       {expanded && (
         <CardContent>
+          {importError && (
+            <div className="flex items-center gap-2 text-sm text-destructive bg-destructive/5 rounded-lg p-2.5 mb-4">
+              <AlertCircle className="w-3.5 h-3.5 shrink-0" /> {importError}
+            </div>
+          )}
           <div className="space-y-2 mb-4">
             <div className="grid grid-cols-2 gap-3">
               <div>

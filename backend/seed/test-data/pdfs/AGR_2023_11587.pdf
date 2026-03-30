@@ -1,0 +1,236 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [4 0 R 6 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792]
+   /Contents 5 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+5 0 obj
+<< /Length 2521 >>
+stream
+BT
+/F1 16 Tf
+1 0 0 1 50 750 Tm
+(CARD ISSUING & PROCESSING AGREEMENT) Tj
+/F1 13 Tf
+1 0 0 1 50 712 Tm
+(AGREEMENT DETAILS) Tj
+/F1 10 Tf
+1 0 0 1 70 690 Tm
+(Agreement ID: AGR-2023-11587) Tj
+/F1 10 Tf
+1 0 0 1 70 675 Tm
+(Type: Card Issuing & Processing Agreement) Tj
+/F1 10 Tf
+1 0 0 1 70 660 Tm
+(Status: Active) Tj
+/F1 10 Tf
+1 0 0 1 70 645 Tm
+(Effective Date: 2023-11-01) Tj
+/F1 10 Tf
+1 0 0 1 70 630 Tm
+(Expiration Date: 2026-10-31) Tj
+/F1 10 Tf
+1 0 0 1 70 615 Tm
+(Auto-Renewal: Yes) Tj
+/F1 13 Tf
+1 0 0 1 50 588 Tm
+(PARTIES) Tj
+/F1 11 Tf
+1 0 0 1 60 566 Tm
+(Bank / Financial Institution) Tj
+/F1 10 Tf
+1 0 0 1 70 548 Tm
+(Name: Atlantic Community Credit Union) Tj
+/F1 10 Tf
+1 0 0 1 70 533 Tm
+(Registration Number: CU-334891) Tj
+/F1 10 Tf
+1 0 0 1 70 518 Tm
+(Jurisdiction: State of Florida) Tj
+/F1 10 Tf
+1 0 0 1 70 503 Tm
+(Address: 400 Brickell Avenue, Suite 600, Miami, FL 33131, United States) Tj
+/F1 10 Tf
+1 0 0 1 70 488 Tm
+(Signatory: Carlos E. Medina, VP Card Services) Tj
+/F1 11 Tf
+1 0 0 1 60 461 Tm
+(Third Party / Vendor) Tj
+/F1 10 Tf
+1 0 0 1 70 443 Tm
+(Name: CardForge Processing Inc.) Tj
+/F1 10 Tf
+1 0 0 1 70 428 Tm
+(Registration Number: CFP-2016-88374) Tj
+/F1 10 Tf
+1 0 0 1 70 413 Tm
+(Jurisdiction: State of Ohio) Tj
+/F1 10 Tf
+1 0 0 1 70 398 Tm
+(Address: 4500 East Royalton Road, Broadview Heights, OH 44147, United States) Tj
+/F1 10 Tf
+1 0 0 1 70 383 Tm
+(Signatory: Jennifer L. Brooks, SVP Issuer Relations) Tj
+/F1 10 Tf
+1 0 0 1 70 368 Tm
+(Contact Email: j.brooks@cardforge.com) Tj
+/F1 13 Tf
+1 0 0 1 50 341 Tm
+(FINANCIAL TERMS) Tj
+/F1 10 Tf
+1 0 0 1 70 319 Tm
+(Currency: USD) Tj
+/F1 10 Tf
+1 0 0 1 70 304 Tm
+(Base Fee: $55,000.00) Tj
+/F1 10 Tf
+1 0 0 1 70 289 Tm
+(Billing Cycle: Monthly) Tj
+/F1 10 Tf
+1 0 0 1 70 274 Tm
+(Payment Terms: Net 15) Tj
+/F1 11 Tf
+1 0 0 1 60 259 Tm
+(Penalties) Tj
+/F1 10 Tf
+1 0 0 1 70 241 Tm
+(Late Payment Rate: 1.0%) Tj
+/F1 10 Tf
+1 0 0 1 70 226 Tm
+(Early Termination Fee: $150,000.00) Tj
+/F1 10 Tf
+1 0 0 1 70 211 Tm
+(Fraud Liability Threshold: 0.05%) Tj
+/F1 11 Tf
+1 0 0 1 60 196 Tm
+(Transaction Fees) Tj
+/F1 10 Tf
+1 0 0 1 70 178 Tm
+(Point Of Sale: $0.08) Tj
+/F1 10 Tf
+1 0 0 1 70 163 Tm
+(Ecommerce: $0.10) Tj
+/F1 10 Tf
+1 0 0 1 70 148 Tm
+(Atm Withdrawal: $0.65) Tj
+/F1 10 Tf
+1 0 0 1 70 133 Tm
+(International Transaction: $0.25) Tj
+/F1 10 Tf
+1 0 0 1 70 118 Tm
+(Declined Transaction: $0.03) Tj
+/F1 11 Tf
+1 0 0 1 60 103 Tm
+(Per-Card Fees) Tj
+/F1 10 Tf
+1 0 0 1 70 85 Tm
+(Card Production: $3.50) Tj
+/F1 10 Tf
+1 0 0 1 70 70 Tm
+(Instant Issue: $5.00) Tj
+/F1 10 Tf
+1 0 0 1 70 55 Tm
+(Virtual Card: $0.50) Tj
+ET
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792]
+   /Contents 7 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+7 0 obj
+<< /Length 1439 >>
+stream
+BT
+/F1 10 Tf
+1 0 0 1 70 750 Tm
+(Replacement Card: $4.00) Tj
+/F1 11 Tf
+1 0 0 1 60 735 Tm
+(Revenue Share) Tj
+/F1 10 Tf
+1 0 0 1 70 717 Tm
+(Interchange Share: 70%) Tj
+/F1 10 Tf
+1 0 0 1 70 702 Tm
+(Foreign Exchange Share: 50%) Tj
+/F1 13 Tf
+1 0 0 1 50 675 Tm
+(SERVICE LEVEL) Tj
+/F1 10 Tf
+1 0 0 1 70 653 Tm
+(Guaranteed Uptime: 99.99%) Tj
+/F1 10 Tf
+1 0 0 1 70 638 Tm
+(Authorization Response Time: Under 100ms) Tj
+/F1 10 Tf
+1 0 0 1 70 623 Tm
+(Card Activation Time: Instant) Tj
+/F1 10 Tf
+1 0 0 1 70 608 Tm
+(Dispute Resolution Sla: 5 business days) Tj
+/F1 10 Tf
+1 0 0 1 70 593 Tm
+(Maintenance Window: Rolling updates \(zero downtime\)) Tj
+/F1 10 Tf
+1 0 0 1 70 578 Tm
+(Data Retention: 7 years) Tj
+/F1 11 Tf
+1 0 0 1 60 563 Tm
+(Disaster Recovery) Tj
+/F1 10 Tf
+1 0 0 1 70 545 Tm
+(Rpo: Zero) Tj
+/F1 10 Tf
+1 0 0 1 70 530 Tm
+(Rto: 2 minutes) Tj
+/F1 10 Tf
+1 0 0 1 70 515 Tm
+(Backup Frequency: Synchronous replication) Tj
+/F1 13 Tf
+1 0 0 1 50 488 Tm
+(COMPLIANCE) Tj
+/F1 10 Tf
+1 0 0 1 70 466 Tm
+(Regulatory Frameworks: PCI DSS Level 1, PCI PIN, EMV Certification, Visa/MC Network Rules, SOC 2 Type II) Tj
+/F1 10 Tf
+1 0 0 1 70 451 Tm
+(Audit Frequency: Annual) Tj
+/F1 10 Tf
+1 0 0 1 70 436 Tm
+(Data Classification: PCI Scope - Restricted) Tj
+/F1 10 Tf
+1 0 0 1 70 421 Tm
+(Encryption Standard: AES-256 + P2PE) Tj
+/F1 10 Tf
+1 0 0 1 70 406 Tm
+(Last Audit Date: 2023-09-15) Tj
+/F1 10 Tf
+1 0 0 1 70 391 Tm
+(Network Certifications: Visa Ready, Mastercard Certified) Tj
+ET
+endstream
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000121 00000 n 
+0000000191 00000 n 
+0000000320 00000 n 
+0000002893 00000 n 
+0000003022 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R >>
+startxref
+4513
+%%EOF

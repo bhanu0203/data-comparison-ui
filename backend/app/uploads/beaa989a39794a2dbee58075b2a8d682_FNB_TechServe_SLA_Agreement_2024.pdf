@@ -1,0 +1,132 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792]
+   /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+endobj
+
+4 0 obj
+<< /Length 2048 >>
+stream
+BT
+/F1 16 Tf
+50 740 Td
+(SERVICE LEVEL AGREEMENT) Tj
+/F1 10 Tf
+0 -30 Td
+(Agreement ID: AGR-2024-00847) Tj
+0 -18 Td
+(Type: Service Level Agreement) Tj
+0 -18 Td
+(Status: Active) Tj
+0 -18 Td
+(Effective Date: January 15, 2024) Tj
+0 -18 Td
+(Expiration Date: January 14, 2026) Tj
+0 -18 Td
+(Auto-Renewal: Yes) Tj
+0 -30 Td
+/F1 14 Tf
+(PARTIES) Tj
+/F1 10 Tf
+0 -22 Td
+(Bank: First National Bank Corp) Tj
+0 -18 Td
+(Registration: BNK-884721) Tj
+0 -18 Td
+(Jurisdiction: State of Delaware) Tj
+0 -18 Td
+(Address: 1200 Market Street, Wilmington, DE 19801, United States) Tj
+0 -18 Td
+(Signatory: Robert J. Mitchell, Chief Operating Officer) Tj
+0 -24 Td
+(Third Party: TechServe Solutions Inc.) Tj
+0 -18 Td
+(Registration: TS-2019-44582) Tj
+0 -18 Td
+(Jurisdiction: State of California) Tj
+0 -18 Td
+(Address: 500 Technology Drive, Suite 300, San Jose, CA 95112, United States) Tj
+0 -18 Td
+(Signatory: Sarah L. Chen, VP of Enterprise Partnerships) Tj
+0 -30 Td
+/F1 14 Tf
+(FINANCIAL TERMS) Tj
+/F1 10 Tf
+0 -22 Td
+(Currency: USD) Tj
+0 -18 Td
+(Base Fee: $250,000.00) Tj
+0 -18 Td
+(Billing Cycle: Monthly) Tj
+0 -18 Td
+(Payment Terms: Net 30) Tj
+0 -18 Td
+(Late Payment Rate: 1.5% per month) Tj
+0 -18 Td
+(Early Termination Fee: $500,000.00) Tj
+0 -18 Td
+(SLA Breach Penalty: $25,000.00 per incident) Tj
+0 -24 Td
+(Volume Tiers:) Tj
+0 -18 Td
+(  Tier 1: 0-100,000 transactions at $0.05/txn) Tj
+0 -18 Td
+(  Tier 2: 100,001-500,000 transactions at $0.03/txn) Tj
+0 -18 Td
+(  Tier 3: 500,001+ transactions at $0.02/txn) Tj
+0 -30 Td
+/F1 14 Tf
+(SERVICE LEVEL) Tj
+/F1 10 Tf
+0 -22 Td
+(Guaranteed Uptime: 99.95%) Tj
+0 -18 Td
+(Response Times - Critical: 15 min, High: 1 hr, Medium: 4 hrs, Low: 24 hrs) Tj
+0 -18 Td
+(Maintenance Window: Sunday 02:00-06:00 EST) Tj
+0 -18 Td
+(Data Retention: 7 years) Tj
+0 -18 Td
+(RPO: 1 hour | RTO: 4 hours | Backup Frequency: Every 6 hours) Tj
+0 -30 Td
+/F1 14 Tf
+(COMPLIANCE) Tj
+/F1 10 Tf
+0 -22 Td
+(Regulatory Frameworks: SOC 2 Type II, PCI DSS, GDPR, CCPA) Tj
+0 -18 Td
+(Audit Frequency: Annual | Last Audit: November 20, 2023) Tj
+0 -18 Td
+(Data Classification: Confidential) Tj
+0 -18 Td
+(Encryption Standard: AES-256) Tj
+ET
+endstream
+endobj
+
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+
+xref
+0 6
+0000000000 65535 f
+0000000009 00000 n
+0000000058 00000 n
+0000000115 00000 n
+0000000266 00000 n
+0000002370 00000 n
+
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+2447
+%%EOF
