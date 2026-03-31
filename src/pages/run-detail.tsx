@@ -2,14 +2,16 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { ComparisonPage } from '@/pages/comparison'
 import { RunProgressBar } from '@/components/run-progress-bar'
-import { Card, CardContent } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import {
-  ArrowLeft, Clock, AlertCircle, RefreshCw,
+  ArrowLeft, Clock, AlertCircle, RefreshCw, Braces, X,
+  ChevronRight, Hash, Type, Calendar, ToggleLeft, List, Layers,
 } from 'lucide-react'
 import { getComparison } from '@/lib/api-service'
 import type { ComparisonRunDetail } from '@/types'
+import type { MetadataConstruct } from '@/types'
 
 const STAGE_LABELS: Record<string, string> = {
   queued: 'Queued',
@@ -23,6 +25,24 @@ const STAGE_LABELS: Record<string, string> = {
   completed: 'Completed',
 }
 
+const TYPE_ICONS: Record<string, typeof Type> = {
+  string: Type,
+  number: Hash,
+  date: Calendar,
+  boolean: ToggleLeft,
+  array: List,
+  object: Layers,
+}
+
+const TYPE_COLORS: Record<string, string> = {
+  string: 'bg-blue-50 text-blue-600 border-blue-200',
+  number: 'bg-amber-50 text-amber-600 border-amber-200',
+  date: 'bg-purple-50 text-purple-600 border-purple-200',
+  boolean: 'bg-green-50 text-green-600 border-green-200',
+  array: 'bg-pink-50 text-pink-600 border-pink-200',
+  object: 'bg-indigo-50 text-indigo-600 border-indigo-200',
+}
+
 export function RunDetailPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
@@ -30,6 +50,7 @@ export function RunDetailPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const [metadataDrawerOpen, setMetadataDrawerOpen] = useState(false)
 
   const fetchRun = useCallback(async () => {
     if (!id) return
@@ -82,6 +103,8 @@ export function RunDetailPage() {
     )
   }
 
+  const mc = run.metadata_construct as unknown as MetadataConstruct | null
+
   // Completed: show comparison report
   if (run.status === 'completed' && run.system_one_result && run.system_two_data) {
     return (
@@ -96,16 +119,111 @@ export function RunDetailPage() {
             {run.run_name && <span className="text-sm text-muted-foreground">— {run.run_name}</span>}
             <Badge variant="success" className="text-[10px]">Completed</Badge>
           </div>
-          <div className="ml-auto text-xs text-muted-foreground flex items-center gap-3">
-            {run.agreement_display_id && <span>{run.agreement_display_id}</span>}
-            {run.agreement_name && <span>{run.agreement_name}</span>}
+          <div className="ml-auto flex items-center gap-3">
+            <div className="text-xs text-muted-foreground flex items-center gap-3">
+              {run.agreement_display_id && <span>{run.agreement_display_id}</span>}
+              {run.agreement_name && <span>{run.agreement_name}</span>}
+            </div>
+            {mc && (
+              <Button
+                variant={metadataDrawerOpen ? 'default' : 'outline'}
+                size="sm"
+                className="gap-1.5"
+                onClick={() => setMetadataDrawerOpen(!metadataDrawerOpen)}
+              >
+                <Braces className="w-3 h-3" />
+                Metadata
+                <ChevronRight className={`w-3 h-3 transition-transform duration-200 ${metadataDrawerOpen ? 'rotate-180' : ''}`} />
+              </Button>
+            )}
           </div>
         </div>
 
-        <ComparisonPage
-          systemOneData={run.system_one_result}
-          systemTwoData={run.system_two_data}
-        />
+        {/* Main content with optional drawer */}
+        <div className="flex gap-4 items-start">
+          {/* Comparison report */}
+          <div className={`min-w-0 transition-all duration-300 ${metadataDrawerOpen ? 'flex-1' : 'w-full'}`}>
+            <ComparisonPage
+              systemOneData={run.system_one_result}
+              systemTwoData={run.system_two_data}
+              matchPercentage={run.match_percentage}
+            />
+          </div>
+
+          {/* Metadata drawer */}
+          {metadataDrawerOpen && mc && (
+            <div className="w-[340px] shrink-0 animate-slide-up">
+              <Card className="sticky top-6 border-primary/20 shadow-lg">
+                <CardHeader className="pb-3">
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-sm flex items-center gap-2">
+                      <Braces className="w-4 h-4 text-primary" />
+                      Metadata Construct
+                    </CardTitle>
+                    <button
+                      onClick={() => setMetadataDrawerOpen(false)}
+                      className="p-1 rounded-md hover:bg-muted transition-colors"
+                    >
+                      <X className="w-3.5 h-3.5 text-muted-foreground" />
+                    </button>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4 max-h-[calc(100vh-200px)] overflow-y-auto">
+                  {/* Schema info */}
+                  <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/40">
+                    <div className="flex-1 space-y-1">
+                      <div className="text-xs text-muted-foreground">Schema</div>
+                      <div className="text-sm font-semibold">{mc.name}</div>
+                    </div>
+                    <Badge variant="outline" className="text-[10px] h-5">
+                      v{mc.version}
+                    </Badge>
+                  </div>
+
+                  {/* Field count */}
+                  <div className="flex items-center justify-between px-1">
+                    <span className="text-xs font-medium text-foreground">
+                      Extraction Fields
+                    </span>
+                    <Badge variant="secondary" className="text-[10px]">
+                      {mc.fields.length} fields
+                    </Badge>
+                  </div>
+
+                  {/* Field list */}
+                  <div className="space-y-2">
+                    {mc.fields.map((field, i) => {
+                      const TypeIcon = TYPE_ICONS[field.type] || Type
+                      const colorClasses = TYPE_COLORS[field.type] || 'bg-gray-50 text-gray-600 border-gray-200'
+                      return (
+                        <div
+                          key={i}
+                          className="group rounded-lg border p-3 space-y-1.5 hover:shadow-sm transition-shadow"
+                        >
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm font-medium text-foreground">{field.fieldName}</span>
+                            <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md border text-[10px] font-medium ${colorClasses}`}>
+                              <TypeIcon className="w-2.5 h-2.5" />
+                              {field.type}
+                            </span>
+                          </div>
+                          <div className="font-mono text-[11px] text-primary/70 bg-primary/5 rounded px-2 py-1 truncate">
+                            {field.jsonPath}
+                          </div>
+                          {field.description && (
+                            <p className="text-[11px] text-muted-foreground leading-relaxed">
+                              {field.description}
+                            </p>
+                          )}
+                        </div>
+                      )
+                    })}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+        </div>
       </div>
     )
   }

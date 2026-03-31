@@ -108,3 +108,35 @@ export interface RunProgress {
   match_percentage: number | null
   error_message: string | null
 }
+
+// ── Pagination ──
+
+export interface StatusCounts {
+  queued: number
+  processing: number
+  completed: number
+  failed: number
+}
+
+export interface PaginatedResponse<T> {
+  items: T[]
+  total: number
+  page: number
+  page_size: number
+  total_pages: number
+  status_counts: StatusCounts
+}
+
+export interface ComparisonSearchParams {
+  page?: number
+  page_size?: number
+  search?: string
+  status?: string
+  date_from?: string
+  date_to?: string
+  match_min?: number
+  match_max?: number
+  agreement_id?: number
+  sort_by?: string
+  sort_order?: string
+}

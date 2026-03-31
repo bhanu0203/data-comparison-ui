@@ -1,15 +1,23 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
+import * as Dialog from '@radix-ui/react-dialog'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { ProgressRing } from '@/components/ui/progress-ring'
 import { RunProgressBar } from '@/components/run-progress-bar'
+import { MetadataEditor } from '@/components/metadata-editor'
+import { SearchFilterBar } from '@/components/search-filter-bar'
 import {
-  LayoutDashboard, Eye, Trash2, Clock, AlertCircle, ArrowRightLeft, RefreshCw,
+  LayoutDashboard, Eye, Trash2, Clock, AlertCircle, ArrowRightLeft,
+  RefreshCw, X, GitCompareArrows, CheckSquare, Square, ChevronLeft,
+  ChevronRight, ChevronsLeft, ChevronsRight,
 } from 'lucide-react'
-import { listComparisons, deleteComparison } from '@/lib/api-service'
-import type { ComparisonRun, RunStatus } from '@/types'
+import { cn } from '@/lib/utils'
+import { listComparisons, deleteComparison, rerunComparison, getComparison } from '@/lib/api-service'
+import { defaultMetadata } from '@/lib/mock-service'
+import type { ComparisonRun, RunStatus, MetadataConstruct, ComparisonSearchParams, StatusCounts } from '@/types'
 
 const STATUS_STYLES: Record<RunStatus, { bg: string; text: string; label: string }> = {
   queued: { bg: 'bg-blue-100', text: 'text-blue-700', label: 'Queued' },
@@ -17,14 +25,6 @@ const STATUS_STYLES: Record<RunStatus, { bg: string; text: string; label: string
   completed: { bg: 'bg-diff-added', text: 'text-diff-added-text', label: 'Completed' },
   failed: { bg: 'bg-diff-removed', text: 'text-diff-removed-text', label: 'Failed' },
 }
-
-const FILTER_OPTIONS: { value: RunStatus | 'all'; label: string }[] = [
-  { value: 'all', label: 'All' },
-  { value: 'queued', label: 'Queued' },
-  { value: 'processing', label: 'Processing' },
-  { value: 'completed', label: 'Completed' },
-  { value: 'failed', label: 'Failed' },
-]
 
 const STAGE_LABELS: Record<string, string> = {
   queued: 'Queued — waiting to start',
@@ -50,25 +50,52 @@ function formatDuration(start: string | null, end: string | null): string {
   return `${mins}m ${secs % 60}s`
 }
 
+const PAGE_SIZE_OPTIONS = [10, 25, 50, 100]
+
 export function RunsPage() {
   const navigate = useNavigate()
   const [runs, setRuns] = useState<ComparisonRun[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [filter, setFilter] = useState<RunStatus | 'all'>('all')
+  const [totalCount, setTotalCount] = useState(0)
+  const [totalPages, setTotalPages] = useState(1)
+  const [statusCounts, setStatusCounts] = useState<StatusCounts>({ queued: 0, processing: 0, completed: 0, failed: 0 })
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  // Search/filter/pagination params
+  const [searchParams, setSearchParams] = useState<ComparisonSearchParams>({
+    page: 1,
+    page_size: 25,
+    sort_by: 'created_at',
+    sort_order: 'desc',
+  })
+
+  // Selection mode
+  const [selectionMode, setSelectionMode] = useState(false)
+  const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set())
+
+  // Rerun dialog state
+  const [rerunDialogOpen, setRerunDialogOpen] = useState(false)
+  const [rerunRunId, setRerunRunId] = useState<number | null>(null)
+  const [rerunRunName, setRerunRunName] = useState('')
+  const [rerunMetadata, setRerunMetadata] = useState<MetadataConstruct | null>(null)
+  const [rerunFetching, setRerunFetching] = useState(false)
+  const [rerunSubmitting, setRerunSubmitting] = useState(false)
 
   const fetchRuns = useCallback(async () => {
     try {
-      const data = await listComparisons()
-      setRuns(data)
+      const data = await listComparisons(searchParams)
+      setRuns(data.items)
+      setTotalCount(data.total)
+      setTotalPages(data.total_pages)
+      setStatusCounts(data.status_counts)
       setError(null)
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Failed to load runs')
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [searchParams])
 
   useEffect(() => {
     fetchRuns()
@@ -91,13 +118,89 @@ export function RunsPage() {
   const handleDelete = async (id: number) => {
     try {
       await deleteComparison(id)
+      selectedIds.delete(id)
+      setSelectedIds(new Set(selectedIds))
       await fetchRuns()
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Delete failed')
     }
   }
 
-  const filtered = filter === 'all' ? runs : runs.filter((r) => r.status === filter)
+  const openRerunDialog = async (run: ComparisonRun) => {
+    setRerunRunId(run.id)
+    setRerunRunName('')
+    setRerunDialogOpen(true)
+    setRerunFetching(true)
+    try {
+      const detail = await getComparison(run.id)
+      if (detail.metadata_construct) {
+        setRerunMetadata(detail.metadata_construct as unknown as MetadataConstruct)
+      } else {
+        setRerunMetadata(defaultMetadata)
+      }
+    } catch {
+      setRerunMetadata(defaultMetadata)
+    } finally {
+      setRerunFetching(false)
+    }
+  }
+
+  const confirmRerun = async () => {
+    if (!rerunRunId || !rerunMetadata) return
+    setRerunSubmitting(true)
+    try {
+      await rerunComparison(rerunRunId, {
+        metadata_construct: rerunMetadata as unknown as Record<string, unknown>,
+        run_name: rerunRunName || undefined,
+      })
+      setRerunDialogOpen(false)
+      await fetchRuns()
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Rerun failed')
+    } finally {
+      setRerunSubmitting(false)
+    }
+  }
+
+  const toggleSelection = (id: number) => {
+    const next = new Set(selectedIds)
+    if (next.has(id)) next.delete(id)
+    else next.add(id)
+    setSelectedIds(next)
+  }
+
+  const handleCompareSelected = () => {
+    const ids = Array.from(selectedIds).join(',')
+    navigate(`/runs/compare?ids=${ids}`)
+  }
+
+  const exitSelectionMode = () => {
+    setSelectionMode(false)
+    setSelectedIds(new Set())
+  }
+
+  // Pagination helpers
+  const currentPage = searchParams.page || 1
+  const pageSize = searchParams.page_size || 25
+  const startItem = (currentPage - 1) * pageSize + 1
+  const endItem = Math.min(currentPage * pageSize, totalCount)
+
+  const goToPage = (page: number) => {
+    setSearchParams((prev) => ({ ...prev, page }))
+  }
+
+  // Generate page numbers to show
+  const getPageNumbers = (): (number | '...')[] => {
+    if (totalPages <= 7) return Array.from({ length: totalPages }, (_, i) => i + 1)
+    const pages: (number | '...')[] = [1]
+    const start = Math.max(2, currentPage - 1)
+    const end = Math.min(totalPages - 1, currentPage + 1)
+    if (start > 2) pages.push('...')
+    for (let i = start; i <= end; i++) pages.push(i)
+    if (end < totalPages - 1) pages.push('...')
+    pages.push(totalPages)
+    return pages
+  }
 
   return (
     <div className="space-y-6 animate-slide-up">
@@ -112,37 +215,33 @@ export function RunsPage() {
             Monitor and manage all extraction comparisons
           </p>
         </div>
-        <Button
-          size="sm"
-          className="ml-auto gap-1.5"
-          onClick={() => navigate('/compare')}
-        >
-          <ArrowRightLeft className="w-3 h-3" /> New Comparison
-        </Button>
+        <div className="ml-auto flex items-center gap-2">
+          <Button
+            variant={selectionMode ? 'default' : 'outline'}
+            size="sm"
+            className="gap-1.5"
+            onClick={() => selectionMode ? exitSelectionMode() : setSelectionMode(true)}
+          >
+            <GitCompareArrows className="w-3 h-3" />
+            {selectionMode ? 'Cancel Selection' : 'Compare Runs'}
+          </Button>
+          <Button
+            size="sm"
+            className="gap-1.5"
+            onClick={() => navigate('/compare')}
+          >
+            <ArrowRightLeft className="w-3 h-3" /> New Comparison
+          </Button>
+        </div>
       </div>
 
-      {/* Filters */}
-      <div className="flex items-center gap-2">
-        {FILTER_OPTIONS.map((opt) => {
-          const count = opt.value === 'all' ? runs.length : runs.filter((r) => r.status === opt.value).length
-          return (
-            <button
-              key={opt.value}
-              onClick={() => setFilter(opt.value)}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
-                filter === opt.value
-                  ? 'bg-primary text-white shadow-sm'
-                  : 'bg-muted text-muted-foreground hover:bg-muted/80'
-              }`}
-            >
-              {opt.label}
-              <span className={`ml-1.5 text-xs ${filter === opt.value ? 'text-white/70' : 'text-muted-foreground/50'}`}>
-                {count}
-              </span>
-            </button>
-          )
-        })}
-      </div>
+      {/* Search & Filters */}
+      <SearchFilterBar
+        params={searchParams}
+        onChange={setSearchParams}
+        statusCounts={statusCounts}
+        totalCount={totalCount}
+      />
 
       {/* Error */}
       {error && (
@@ -157,14 +256,14 @@ export function RunsPage() {
       )}
 
       {/* Empty */}
-      {!loading && filtered.length === 0 && (
+      {!loading && runs.length === 0 && (
         <Card className="border-dashed">
           <CardContent className="py-12 text-center">
             <LayoutDashboard className="w-12 h-12 text-muted-foreground/30 mx-auto mb-3" />
             <p className="text-muted-foreground">
-              {filter === 'all' ? 'No comparison runs yet' : `No ${filter} runs`}
+              {totalCount === 0 ? 'No comparison runs yet' : 'No runs match your filters'}
             </p>
-            {filter === 'all' && (
+            {totalCount === 0 && (
               <Button
                 variant="outline"
                 size="sm"
@@ -179,18 +278,43 @@ export function RunsPage() {
       )}
 
       {/* Run Cards */}
-      {filtered.map((run) => {
+      {runs.map((run) => {
         const style = STATUS_STYLES[run.status]
         const isActive = run.status === 'queued' || run.status === 'processing'
+        const isSelected = selectedIds.has(run.id)
+        const isSelectable = run.status === 'completed'
 
         return (
           <Card
             key={run.id}
-            className={`transition-all duration-200 hover:shadow-md ${isActive ? 'border-primary/30 shadow-md' : ''}`}
+            className={cn(
+              'transition-all duration-200 hover:shadow-md',
+              isActive && 'border-primary/30 shadow-md',
+              selectionMode && isSelected && 'border-primary ring-2 ring-primary/20',
+              selectionMode && !isSelectable && 'opacity-50',
+            )}
           >
             <CardContent className="p-5">
-              {/* Top row: identity + status + actions */}
               <div className="flex items-center gap-4">
+                {/* Selection checkbox */}
+                {selectionMode && (
+                  <button
+                    onClick={() => isSelectable && toggleSelection(run.id)}
+                    disabled={!isSelectable}
+                    className={cn(
+                      'shrink-0 transition-colors',
+                      isSelectable ? 'cursor-pointer' : 'cursor-not-allowed',
+                    )}
+                    title={isSelectable ? undefined : 'Only completed runs can be compared'}
+                  >
+                    {isSelected ? (
+                      <CheckSquare className="w-5 h-5 text-primary" />
+                    ) : (
+                      <Square className={cn('w-5 h-5', isSelectable ? 'text-muted-foreground hover:text-primary' : 'text-muted-foreground/30')} />
+                    )}
+                  </button>
+                )}
+
                 {/* Match ring or progress circle */}
                 <div className="shrink-0">
                   {run.status === 'completed' && run.match_percentage != null ? (
@@ -245,26 +369,38 @@ export function RunsPage() {
                 </div>
 
                 {/* Actions */}
-                <div className="flex items-center gap-1.5 shrink-0">
-                  {run.status === 'completed' && (
+                {!selectionMode && (
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    {run.status === 'completed' && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="gap-1.5"
+                        onClick={() => navigate(`/runs/${run.id}`)}
+                      >
+                        <Eye className="w-3 h-3" /> View Report
+                      </Button>
+                    )}
+                    {(run.status === 'completed' || run.status === 'failed') && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="gap-1.5"
+                        onClick={() => openRerunDialog(run)}
+                      >
+                        <RefreshCw className="w-3 h-3" /> Rerun
+                      </Button>
+                    )}
                     <Button
-                      variant="outline"
-                      size="sm"
-                      className="gap-1.5"
-                      onClick={() => navigate(`/runs/${run.id}`)}
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-destructive/60 hover:text-destructive hover:bg-destructive/10"
+                      onClick={() => handleDelete(run.id)}
                     >
-                      <Eye className="w-3 h-3" /> View Report
+                      <Trash2 className="w-4 h-4" />
                     </Button>
-                  )}
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8 text-destructive/60 hover:text-destructive hover:bg-destructive/10"
-                    onClick={() => handleDelete(run.id)}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                </div>
+                  </div>
+                )}
               </div>
 
               {/* Rich inline progress for active runs */}
@@ -297,6 +433,201 @@ export function RunsPage() {
           </Card>
         )
       })}
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between pt-2">
+          <div className="text-xs text-muted-foreground">
+            Showing {startItem}–{endItem} of {totalCount} runs
+          </div>
+
+          <div className="flex items-center gap-1">
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-8 w-8"
+              disabled={currentPage === 1}
+              onClick={() => goToPage(1)}
+            >
+              <ChevronsLeft className="w-3.5 h-3.5" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-8 w-8"
+              disabled={currentPage === 1}
+              onClick={() => goToPage(currentPage - 1)}
+            >
+              <ChevronLeft className="w-3.5 h-3.5" />
+            </Button>
+
+            {getPageNumbers().map((p, i) =>
+              p === '...' ? (
+                <span key={`dots-${i}`} className="px-1 text-xs text-muted-foreground">...</span>
+              ) : (
+                <button
+                  key={p}
+                  onClick={() => goToPage(p)}
+                  className={cn(
+                    'h-8 w-8 rounded-md text-xs font-medium transition-colors',
+                    p === currentPage
+                      ? 'bg-primary text-white'
+                      : 'hover:bg-muted text-muted-foreground'
+                  )}
+                >
+                  {p}
+                </button>
+              )
+            )}
+
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-8 w-8"
+              disabled={currentPage === totalPages}
+              onClick={() => goToPage(currentPage + 1)}
+            >
+              <ChevronRight className="w-3.5 h-3.5" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-8 w-8"
+              disabled={currentPage === totalPages}
+              onClick={() => goToPage(totalPages)}
+            >
+              <ChevronsRight className="w-3.5 h-3.5" />
+            </Button>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-muted-foreground">Per page:</span>
+            <select
+              value={pageSize}
+              onChange={(e) => setSearchParams((prev) => ({ ...prev, page_size: Number(e.target.value), page: 1 }))}
+              className="rounded-md border px-2 py-1 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-primary/30"
+            >
+              {PAGE_SIZE_OPTIONS.map((size) => (
+                <option key={size} value={size}>{size}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+      )}
+
+      {/* Selection floating bar — rendered via portal to escape transform containing block */}
+      {selectionMode && createPortal(
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100]">
+          <div className="flex items-center gap-4 bg-foreground text-background rounded-2xl shadow-2xl px-6 py-3 animate-slide-up">
+            {selectedIds.size === 0 ? (
+              <span className="text-sm text-background/70">
+                Select completed runs to compare
+              </span>
+            ) : (
+              <span className="text-sm font-medium">
+                {selectedIds.size} run{selectedIds.size > 1 ? 's' : ''} selected
+              </span>
+            )}
+            <div className="w-px h-5 bg-background/20" />
+            {selectedIds.size > 0 && (
+              <Button
+                size="sm"
+                variant="secondary"
+                className="gap-1.5"
+                onClick={() => setSelectedIds(new Set())}
+              >
+                Clear
+              </Button>
+            )}
+            <Button
+              size="sm"
+              className="gap-1.5 bg-primary hover:bg-primary/90 text-white"
+              disabled={selectedIds.size < 2}
+              onClick={handleCompareSelected}
+            >
+              <GitCompareArrows className="w-3.5 h-3.5" />
+              Compare{selectedIds.size >= 2 ? ` ${selectedIds.size} Runs` : ''}
+            </Button>
+            <button
+              onClick={exitSelectionMode}
+              className="ml-1 p-1 rounded-full hover:bg-background/20 transition-colors"
+              title="Exit selection mode"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>,
+        document.body
+      )}
+
+      {/* Rerun Dialog */}
+      <Dialog.Root open={rerunDialogOpen} onOpenChange={setRerunDialogOpen}>
+        <Dialog.Portal>
+          <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 data-[state=open]:animate-fade-in" />
+          <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col animate-slide-up">
+            <div className="flex items-center justify-between px-6 py-4 border-b bg-muted/20">
+              <div>
+                <Dialog.Title className="text-lg font-bold text-foreground flex items-center gap-2">
+                  <RefreshCw className="w-5 h-5 text-primary" />
+                  Rerun Comparison
+                </Dialog.Title>
+                <Dialog.Description className="text-sm text-muted-foreground mt-0.5">
+                  Creates a new run from Run #{rerunRunId}. Optionally update the metadata construct below.
+                </Dialog.Description>
+              </div>
+              <Dialog.Close asChild>
+                <button className="p-1.5 rounded-lg hover:bg-muted transition-colors">
+                  <X className="w-4 h-4 text-muted-foreground" />
+                </button>
+              </Dialog.Close>
+            </div>
+
+            <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-1.5">
+                  Run Name <span className="text-muted-foreground font-normal">(optional)</span>
+                </label>
+                <input
+                  type="text"
+                  value={rerunRunName}
+                  onChange={(e) => setRerunRunName(e.target.value)}
+                  placeholder={`Rerun of #${rerunRunId}`}
+                  className="w-full rounded-lg border bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+                />
+              </div>
+
+              {rerunFetching ? (
+                <div className="py-12 text-center">
+                  <RefreshCw className="w-6 h-6 text-primary animate-spin mx-auto mb-2" />
+                  <span className="text-sm text-muted-foreground">Loading metadata construct...</span>
+                </div>
+              ) : rerunMetadata ? (
+                <MetadataEditor metadata={rerunMetadata} onChange={setRerunMetadata} />
+              ) : null}
+            </div>
+
+            <div className="flex items-center justify-between px-6 py-4 border-t bg-muted/10">
+              <p className="text-xs text-muted-foreground">
+                A new comparison run will be created with a separate report.
+              </p>
+              <div className="flex items-center gap-2">
+                <Dialog.Close asChild>
+                  <Button variant="outline" size="sm">Cancel</Button>
+                </Dialog.Close>
+                <Button
+                  size="sm"
+                  onClick={confirmRerun}
+                  disabled={rerunSubmitting || rerunFetching}
+                  className="gap-1.5"
+                >
+                  <RefreshCw className={`w-3 h-3 ${rerunSubmitting ? 'animate-spin' : ''}`} />
+                  {rerunSubmitting ? 'Creating...' : 'Create Rerun'}
+                </Button>
+              </div>
+            </div>
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
     </div>
   )
 }

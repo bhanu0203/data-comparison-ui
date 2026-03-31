@@ -4,6 +4,8 @@ import type {
   ComparisonRun,
   ComparisonRunDetail,
   RunProgress,
+  PaginatedResponse,
+  ComparisonSearchParams,
 } from '@/types'
 
 const BASE = '/api'
@@ -60,16 +62,46 @@ export async function createComparison(data: {
   return request('/comparisons', { method: 'POST', body: form })
 }
 
-export async function listComparisons(): Promise<ComparisonRun[]> {
-  return request('/comparisons')
+export async function listComparisons(
+  params?: ComparisonSearchParams
+): Promise<PaginatedResponse<ComparisonRun>> {
+  const sp = new URLSearchParams()
+  if (params) {
+    for (const [key, val] of Object.entries(params)) {
+      if (val !== undefined && val !== null && val !== '') {
+        sp.set(key, String(val))
+      }
+    }
+  }
+  const qs = sp.toString()
+  return request(`/comparisons${qs ? `?${qs}` : ''}`)
 }
 
 export async function getComparison(id: number): Promise<ComparisonRunDetail> {
   return request(`/comparisons/${id}`)
 }
 
+export async function getComparisonsBatch(runIds: number[]): Promise<ComparisonRunDetail[]> {
+  return request('/comparisons/batch', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(runIds),
+  })
+}
+
 export async function getRunProgress(id: number): Promise<RunProgress> {
   return request(`/comparisons/${id}/progress`)
+}
+
+export async function rerunComparison(
+  id: number,
+  options?: { metadata_construct?: Record<string, unknown>; run_name?: string }
+): Promise<ComparisonRun> {
+  return request(`/comparisons/${id}/rerun`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: options ? JSON.stringify(options) : undefined,
+  })
 }
 
 export async function deleteComparison(id: number): Promise<void> {

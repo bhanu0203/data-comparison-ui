@@ -24,6 +24,7 @@ type ViewMode = 'tree' | 'table' | 'side-by-side' | 'raw'
 interface ComparisonProps {
   systemOneData: ExtractionResult
   systemTwoData: ExtractionResult
+  matchPercentage?: number | null
 }
 
 const filterOptions: { value: DiffType | 'all'; label: string; color: string }[] = [
@@ -42,7 +43,7 @@ const viewModes: { value: ViewMode; label: string; icon: typeof TreePine }[] = [
   { value: 'raw', label: 'Raw JSON', icon: Code2 },
 ]
 
-export function ComparisonPage({ systemOneData, systemTwoData }: ComparisonProps) {
+export function ComparisonPage({ systemOneData, systemTwoData, matchPercentage }: ComparisonProps) {
   const [viewMode, setViewMode] = useState<ViewMode>('tree')
   const [filter, setFilter] = useState<DiffType | 'all'>('all')
 
@@ -87,7 +88,7 @@ export function ComparisonPage({ systemOneData, systemTwoData }: ComparisonProps
       {/* Summary Dashboard */}
       <Card>
         <CardContent className="p-6">
-          <SummaryDashboard summary={summary} />
+          <SummaryDashboard summary={summary} matchPercentageOverride={matchPercentage} />
         </CardContent>
       </Card>
 

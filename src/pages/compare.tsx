@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PdfUpload } from '@/components/pdf-upload'
 import { MetadataEditor } from '@/components/metadata-editor'
+import { AgreementPicker } from '@/components/agreement-picker'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import {
   ArrowRightLeft, Rocket, ArrowRight, AlertCircle, FileStack,
 } from 'lucide-react'
@@ -80,9 +80,7 @@ export function ComparePage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
-          {loadingAgreements ? (
-            <p className="text-sm text-muted-foreground">Loading agreements...</p>
-          ) : agreements.length === 0 ? (
+          {agreements.length === 0 && !loadingAgreements ? (
             <div className="text-center py-6">
               <p className="text-sm text-muted-foreground">No agreements available.</p>
               <Button
@@ -95,38 +93,12 @@ export function ComparePage() {
               </Button>
             </div>
           ) : (
-            <div className="grid gap-2">
-              {agreements.map((agr) => (
-                <button
-                  key={agr.id}
-                  onClick={() => setSelectedAgreementId(agr.id)}
-                  className={`flex items-center gap-3 p-3 rounded-lg border text-left transition-all ${
-                    selectedAgreementId === agr.id
-                      ? 'border-primary bg-primary/5 shadow-sm'
-                      : 'border-border hover:border-primary/30 hover:bg-muted/30'
-                  }`}
-                >
-                  <div className={`w-4 h-4 rounded-full border-2 shrink-0 transition-all ${
-                    selectedAgreementId === agr.id
-                      ? 'border-primary bg-primary'
-                      : 'border-muted-foreground/30'
-                  }`}>
-                    {selectedAgreementId === agr.id && (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <div className="w-1.5 h-1.5 rounded-full bg-white" />
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium text-sm">{agr.name}</span>
-                      <Badge variant="secondary" className="text-[10px]">{agr.agreement_id}</Badge>
-                    </div>
-                    <span className="text-xs text-muted-foreground">{agr.field_count} fields</span>
-                  </div>
-                </button>
-              ))}
-            </div>
+            <AgreementPicker
+              agreements={agreements}
+              selectedId={selectedAgreementId}
+              onSelect={setSelectedAgreementId}
+              loading={loadingAgreements}
+            />
           )}
 
           {/* Run Name */}

@@ -5,9 +5,11 @@ import type { DiffSummary } from '@/types'
 
 interface SummaryDashboardProps {
   summary: DiffSummary
+  matchPercentageOverride?: number | null
 }
 
-export function SummaryDashboard({ summary }: SummaryDashboardProps) {
+export function SummaryDashboard({ summary, matchPercentageOverride }: SummaryDashboardProps) {
+  const displayMatchPercentage = matchPercentageOverride ?? summary.matchPercentage
   const stats = [
     {
       label: 'Matched',
@@ -55,7 +57,7 @@ export function SummaryDashboard({ summary }: SummaryDashboardProps) {
     <div className="space-y-6">
       {/* Main score */}
       <div className="flex items-center gap-8 justify-center py-4">
-        <ProgressRing value={summary.matchPercentage} size={140} strokeWidth={12} label="Match Rate" />
+        <ProgressRing value={displayMatchPercentage} size={140} strokeWidth={12} label="Match Rate" />
         <div className="text-left">
           <div className="flex items-center gap-2 text-muted-foreground mb-1">
             <BarChart3 className="w-4 h-4" />

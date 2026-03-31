@@ -55,6 +55,27 @@ class ComparisonRunDetail(ComparisonRunResponse):
     model_config = {"from_attributes": True}
 
 
+class StatusCounts(BaseModel):
+    queued: int = 0
+    processing: int = 0
+    completed: int = 0
+    failed: int = 0
+
+
+class PaginatedComparisonRuns(BaseModel):
+    items: list[ComparisonRunResponse]
+    total: int
+    page: int
+    page_size: int
+    total_pages: int
+    status_counts: StatusCounts
+
+
+class RerunRequest(BaseModel):
+    metadata_construct: dict | None = None
+    run_name: str | None = None
+
+
 class RunProgress(BaseModel):
     id: int
     status: str

@@ -4,6 +4,7 @@ import { AgreementsPage } from '@/pages/agreements'
 import { ComparePage } from '@/pages/compare'
 import { RunsPage } from '@/pages/runs'
 import { RunDetailPage } from '@/pages/run-detail'
+import { MultiRunComparisonPage } from '@/pages/multi-run-comparison'
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="/agreements" element={<AgreementsPage />} />
           <Route path="/compare" element={<ComparePage />} />
           <Route path="/runs" element={<RunsPage />} />
+          <Route path="/runs/compare" element={<MultiRunComparisonPage />} />
           <Route path="/runs/:id" element={<RunDetailPage />} />
         </Routes>
       </main>
