@@ -63,10 +63,10 @@ async def get_agreement(agreement_id: int, db: AsyncSession = Depends(get_db)):
     agreement = await db.get(Agreement, agreement_id)
     if not agreement:
         raise HTTPException(404, "Agreement not found")
-    # Parse json_data string to dict for the response
-    resp = AgreementDetail.model_validate(agreement)
-    resp.json_data = json.loads(agreement.json_data)
-    return resp
+    # Parse json_data string to dict before validation
+    data = {c.key: getattr(agreement, c.key) for c in agreement.__table__.columns}
+    data["json_data"] = json.loads(agreement.json_data)
+    return AgreementDetail.model_validate(data)
 
 
 @router.delete("/{agreement_id}", status_code=204)
