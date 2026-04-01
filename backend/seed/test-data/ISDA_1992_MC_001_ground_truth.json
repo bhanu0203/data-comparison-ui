@@ -1,0 +1,210 @@
+{
+  "agreement": {
+    "id": "ISDA-1992-MC-001",
+    "type": "ISDA Master Agreement",
+    "subType": "Multicurrency - Cross Border",
+    "version": "1992",
+    "status": "Active",
+    "effectiveDate": "1992-01-01",
+    "governingBody": "International Swap Dealers Association, Inc.",
+    "singleAgreementClause": true
+  },
+  "parties": {
+    "partyA": {
+      "name": null,
+      "role": "Party A",
+      "processAgent": null,
+      "address": null,
+      "jurisdiction": null
+    },
+    "partyB": {
+      "name": null,
+      "role": "Party B",
+      "processAgent": null,
+      "address": null,
+      "jurisdiction": null
+    }
+  },
+  "obligations": {
+    "paymentConditions": {
+      "netPayments": true,
+      "paymentCurrency": "Contractual Currency",
+      "paymentMethod": "Freely transferable funds",
+      "interestCompounding": "Daily"
+    },
+    "deliveryObligations": true,
+    "defaultInterestRate": "Default Rate",
+    "defaultInterestBasis": "Daily compounding, actual days elapsed"
+  },
+  "representations": {
+    "basicRepresentations": [
+      "Status - duly organised and validly existing",
+      "Powers - all necessary power to execute and perform",
+      "No Violation - does not violate or conflict with laws or agreements",
+      "Consents - all governmental and other consents obtained",
+      "Binding Obligations - legal, valid and binding obligations"
+    ],
+    "absenceOfCertainEvents": "No Event of Default or Potential Event of Default continuing",
+    "absenceOfLitigation": "No pending or threatened litigation likely to affect legality",
+    "accuracyOfSpecifiedInformation": true,
+    "payerTaxRepresentations": true,
+    "payeeTaxRepresentations": true
+  },
+  "taxProvisions": {
+    "grossUpRequired": true,
+    "indemnifiableTax": "Any Tax other than Tax from present or former connection between jurisdiction and recipient",
+    "stampTaxResponsibility": "Each party responsible for own Stamp Tax Jurisdiction",
+    "withholdingTaxLiability": "Party must pay liability if fails to deduct or withhold"
+  },
+  "agreements": {
+    "furnishSpecifiedInformation": true,
+    "maintainAuthorisations": true,
+    "complyWithLaws": true,
+    "stampTaxIndemnity": true,
+    "paymentOfStampTax": "Each party pays own Stamp Tax Jurisdiction taxes"
+  },
+  "eventsOfDefault": {
+    "failureToPayOrDeliver": {
+      "gracePeriod": "3 Local Business Days",
+      "triggerCondition": "Failure to make payment or delivery when due"
+    },
+    "breachOfAgreement": {
+      "gracePeriod": "30 days",
+      "triggerCondition": "Failure to comply with any agreement or obligation"
+    },
+    "creditSupportDefault": {
+      "description": "Failure to comply with Credit Support Document obligations",
+      "includesExpiration": true
+    },
+    "misrepresentation": {
+      "description": "Representation proves to have been incorrect or misleading in material respect"
+    },
+    "defaultUnderSpecifiedTransaction": {
+      "description": "Default under a Specified Transaction",
+      "includesFailureToPayDeliver": true
+    },
+    "crossDefault": {
+      "thresholdAmount": "As specified in Schedule",
+      "appliesTo": [
+        "party",
+        "Credit Support Provider",
+        "Specified Entity"
+      ]
+    },
+    "bankruptcy": {
+      "triggers": [
+        "Dissolution (other than consolidation/merger)",
+        "Insolvency or inability to pay debts",
+        "General assignment for benefit of creditors",
+        "Bankruptcy or insolvency proceeding instituted",
+        "Appointment of receiver, administrator or similar",
+        "Secured party takes possession of substantially all assets",
+        "Analogous proceeding under any jurisdiction"
+      ],
+      "dismissalPeriod": "15 days (for proceedings instituted against)"
+    },
+    "mergerWithoutAssumption": "Successor fails to assume obligations"
+  },
+  "terminationEvents": {
+    "illegality": {
+      "description": "Becomes unlawful to perform due to change in law",
+      "affectedParty": "Party for which performance is unlawful"
+    },
+    "taxEvent": {
+      "description": "Party required to pay additional amount due to tax action or Change in Tax Law",
+      "substantialLikelihood": true
+    },
+    "taxEventUponMerger": {
+      "description": "Tax Event arising from merger of party or Credit Support Provider",
+      "burdenedParty": "As determined per Section 5(b)(iii)"
+    },
+    "creditEventUponMerger": {
+      "description": "Material reduction in creditworthiness after merger",
+      "specifiedInSchedule": true
+    },
+    "additionalTerminationEvents": "As specified in Schedule"
+  },
+  "earlyTermination": {
+    "rightToTerminateOnDefault": {
+      "noticePeriod": "Not more than 20 days",
+      "designationDay": "Not earlier than day notice is effective"
+    },
+    "automaticEarlyTermination": "As specified in Schedule",
+    "paymentMethods": [
+      "Market Quotation",
+      "Loss"
+    ],
+    "settlementMethods": [
+      "First Method",
+      "Second Method"
+    ],
+    "settlementCombinations": {
+      "firstMethodMarketQuotation": "Settlement Amount in favour of Non-defaulting Party",
+      "firstMethodLoss": "Non-defaulting Party's Loss (positive only)",
+      "secondMethodMarketQuotation": "Net Settlement Amount (either direction)",
+      "secondMethodLoss": "Non-defaulting Party's Loss (either direction)"
+    },
+    "setOffRights": true
+  },
+  "transferAndAssignment": {
+    "consentRequired": true,
+    "exceptions": [
+      "Transfer pursuant to consolidation, amalgamation, or merger",
+      "Transfer of amounts payable from Defaulting Party under Section 6(e)"
+    ]
+  },
+  "contractualCurrency": {
+    "paymentInContractualCurrency": true,
+    "judgmentCurrencyIndemnity": true,
+    "separateIndemnity": true
+  },
+  "miscellaneous": {
+    "entireAgreement": true,
+    "amendmentRequirement": "In writing, executed by each party",
+    "survivalOfObligations": true,
+    "remediesCumulative": true,
+    "counterparts": true,
+    "noWaiverOfRights": true,
+    "headingsDescriptiveOnly": true,
+    "interestAndCompensation": true
+  },
+  "governingLawAndJurisdiction": {
+    "governingLaw": "As specified in Schedule",
+    "jurisdictionOfCourts": "As specified in Schedule",
+    "processAgent": "As specified in Schedule",
+    "waiverOfImmunities": true
+  },
+  "notices": {
+    "methods": [
+      "In writing, delivered in person or by courier",
+      "Telex",
+      "Facsimile transmission",
+      "Certified or registered mail",
+      "Electronic messaging system"
+    ],
+    "restrictions": "Section 5 or 6 notices may not be given by fax or electronic messaging",
+    "changeOfAddress": "By notice to other party"
+  },
+  "definitions": {
+    "additionalTerminationEvent": "As specified in Section 5(b)",
+    "affectedParty": "As specified in Section 5(b)",
+    "affiliate": "Entity controlled by, controlling, or under common control with a person",
+    "automaticEarlyTermination": "As specified in Section 5(a)(vii)",
+    "burdenedParty": "As specified in Section 5(b)",
+    "changeInTaxLaw": "Enactment, promulgation or change in tax treaty, law, regulation or ruling",
+    "consent": "Consent, approval, action, authorisation, exemption, notice, filing, registration or exchange control consent",
+    "contractualCurrency": "As specified in Section 8",
+    "crossDefault": "As specified in Section 5(a)(vi)",
+    "defaultRate": "Cost of funding plus 1% per annum",
+    "earlyTerminationDate": "As determined per Section 6(a) or 6(b)(iv)",
+    "localBusinessDay": "Day when commercial banks are open for business",
+    "loss": "Total losses and costs reasonably determined in good faith",
+    "marketQuotation": "Weighted average of quotations from Reference Market-makers",
+    "scheduledPaymentDate": "Date on which payment or delivery would have been required",
+    "specifiedEntity": "As specified in Schedule",
+    "specifiedIndebtedness": "Any obligation for borrowed money (default definition)",
+    "specifiedTransaction": "Rate swap, currency swap, commodity swap, equity swap, etc.",
+    "terminationCurrency": "As specified in Schedule or freely available and transferable",
+    "thresholdAmount": "As specified in Schedule"
+  }
+}

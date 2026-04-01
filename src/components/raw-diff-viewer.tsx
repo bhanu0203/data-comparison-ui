@@ -154,7 +154,7 @@ function CopyButton({ text, label }: { text: string; label: string }) {
   )
 }
 
-export function RawDiffViewer({ leftData, rightData, leftLabel = 'System 1', rightLabel = 'System 2' }: RawDiffViewerProps) {
+export function RawDiffViewer({ leftData, rightData, leftLabel = 'LLM Extract', rightLabel = 'Baseline' }: RawDiffViewerProps) {
   const leftRef = useRef<HTMLDivElement>(null)
   const rightRef = useRef<HTMLDivElement>(null)
   const isSyncing = useRef(false)

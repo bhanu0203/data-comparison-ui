@@ -1,13 +1,13 @@
-import { GitCompareArrows } from 'lucide-react'
+import { Scale } from 'lucide-react'
 
 interface HeaderProps {
   currentStep: number
 }
 
 const steps = [
-  { label: 'System 1: PDF Extraction', num: 1 },
-  { label: 'System 2: Direct Extraction', num: 2 },
-  { label: 'Comparison & Analysis', num: 3 },
+  { label: 'LLM Extraction', num: 1 },
+  { label: 'Baseline Data', num: 2 },
+  { label: 'Reconciliation & Analysis', num: 3 },
 ]
 
 export function Header({ currentStep }: HeaderProps) {
@@ -17,11 +17,11 @@ export function Header({ currentStep }: HeaderProps) {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
-              <GitCompareArrows className="w-5 h-5 text-white" />
+              <Scale className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h1 className="text-lg font-bold text-foreground">DataDiff Pro</h1>
-              <p className="text-xs text-muted-foreground">Multi-System Comparison Engine</p>
+              <h1 className="text-lg font-bold text-foreground">AgreementIQ</h1>
+              <p className="text-xs text-muted-foreground">Agreement Extraction & Reconciliation</p>
             </div>
           </div>
 

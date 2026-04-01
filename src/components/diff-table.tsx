@@ -27,11 +27,11 @@ function formatValue(val: unknown): string {
 
 const rowStyles: Record<DiffType, string> = {
   match: '',
-  mismatch: 'bg-diff-changed/30',
-  missing_left: 'bg-blue-50/50',
-  missing_right: 'bg-purple-50/50',
-  type_mismatch: 'bg-diff-removed/30',
-  structural: 'bg-diff-changed/15',
+  mismatch: 'bg-amber-50/60',
+  missing_left: 'bg-blue-50/60',
+  missing_right: 'bg-purple-50/60',
+  type_mismatch: 'bg-rose-50/60',
+  structural: 'bg-amber-50/30',
 }
 
 const badgeVariant: Record<DiffType, 'success' | 'warning' | 'error' | 'secondary'> = {
@@ -46,8 +46,8 @@ const badgeVariant: Record<DiffType, 'success' | 'warning' | 'error' | 'secondar
 const statusLabels: Record<DiffType, string> = {
   match: 'Match',
   mismatch: 'Mismatch',
-  missing_left: 'Only Sys 2',
-  missing_right: 'Only Sys 1',
+  missing_left: 'Baseline Only',
+  missing_right: 'LLM Only',
   type_mismatch: 'Type Diff',
   structural: 'Structural',
 }
@@ -62,8 +62,8 @@ export function DiffTable({ entries, filter }: DiffTableProps) {
         <thead>
           <tr className="bg-muted/50">
             <th className="text-left px-4 py-3 font-medium text-muted-foreground">Path</th>
-            <th className="text-left px-4 py-3 font-medium text-muted-foreground">System 1</th>
-            <th className="text-left px-4 py-3 font-medium text-muted-foreground">System 2</th>
+            <th className="text-left px-4 py-3 font-medium text-muted-foreground">LLM Extract</th>
+            <th className="text-left px-4 py-3 font-medium text-muted-foreground">Baseline</th>
             <th className="text-center px-4 py-3 font-medium text-muted-foreground">Status</th>
           </tr>
         </thead>

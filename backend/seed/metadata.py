@@ -3,8 +3,10 @@ Metadata constructs for PDF extraction.
 
 Each construct defines the fields, JSON paths, descriptions, and types
 that guide the LLM when extracting structured data from agreement PDFs.
-There is one general-purpose schema and 10 agreement-specific schemas.
+There is one general-purpose schema and 11 agreement-specific schemas.
 """
+
+from seed.isda_test_data import ISDA_METADATA
 
 # ── General-purpose bank agreement extraction schema ──
 GENERAL_METADATA = {
@@ -211,4 +213,7 @@ AGREEMENT_METADATA = {
             {"fieldName": "Fiduciary Compliance", "jsonPath": "compliance.fiduciaryCompliance", "description": "Fiduciary compliance certified", "type": "boolean"},
         ],
     },
+
+    # 11. ISDA Master Agreement
+    "ISDA-1992-MC-001": ISDA_METADATA,
 }

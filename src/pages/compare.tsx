@@ -62,9 +62,9 @@ export function ComparePage() {
           <ArrowRightLeft className="w-5 h-5 text-primary" />
         </div>
         <div>
-          <h2 className="text-xl font-bold text-foreground">New Comparison</h2>
+          <h2 className="text-xl font-bold text-foreground">New Reconciliation</h2>
           <p className="text-sm text-muted-foreground">
-            Select an agreement, upload a PDF, and run extraction comparison
+            Select a baseline, upload an agreement PDF, and run LLM extraction against ground truth
           </p>
         </div>
       </div>
@@ -73,23 +73,23 @@ export function ComparePage() {
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-base flex items-center gap-2">
-            <FileStack className="w-4 h-4" /> Select Ground Truth Agreement
+            <FileStack className="w-4 h-4" /> Select Baseline Agreement
           </CardTitle>
           <CardDescription>
-            The agreement JSON will be compared against the PDF extraction result
+            The ground truth JSON will be reconciled against the LLM extraction result
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
           {agreements.length === 0 && !loadingAgreements ? (
             <div className="text-center py-6">
-              <p className="text-sm text-muted-foreground">No agreements available.</p>
+              <p className="text-sm text-muted-foreground">No baselines available.</p>
               <Button
                 variant="outline"
                 size="sm"
                 className="mt-2 gap-1.5"
-                onClick={() => navigate('/agreements')}
+                onClick={() => navigate('/baselines')}
               >
-                <FileStack className="w-3 h-3" /> Upload an Agreement
+                <FileStack className="w-3 h-3" /> Add a Baseline
               </Button>
             </div>
           ) : (
@@ -141,12 +141,12 @@ export function ComparePage() {
           }`}>
             <CardHeader className="pb-2">
               <CardTitle className={`text-sm transition-colors duration-300 ${isReady ? 'text-primary' : ''}`}>
-                {isReady ? 'All Set — Ready to Compare!' : 'Ready to Compare?'}
+                {isReady ? 'All Set — Ready to Reconcile!' : 'Ready to Reconcile?'}
               </CardTitle>
               <CardDescription>
                 {selectedAgreement
-                  ? `PDF will be extracted and compared against "${selectedAgreement.name}"`
-                  : 'Select an agreement and upload a PDF to continue'}
+                  ? `PDF will be extracted via LLM and reconciled against "${selectedAgreement.name}"`
+                  : 'Select a baseline and upload a PDF to continue'}
               </CardDescription>
             </CardHeader>
             <CardContent className="flex items-center gap-3">
@@ -161,18 +161,18 @@ export function ComparePage() {
                 }`}
               >
                 <Rocket className={`w-4 h-4 transition-transform duration-500 ${isReady ? 'animate-bounce' : ''}`} />
-                {submitting ? 'Submitting...' : 'Run Comparison'}
+                {submitting ? 'Submitting...' : 'Run Reconciliation'}
                 <ArrowRight className="w-4 h-4" />
               </Button>
               {!selectedAgreementId && (
-                <span className="text-sm text-muted-foreground">Select an agreement first</span>
+                <span className="text-sm text-muted-foreground">Select a baseline first</span>
               )}
               {selectedAgreementId && !file && (
                 <span className="text-sm text-muted-foreground">Upload a PDF to continue</span>
               )}
               {isReady && (
                 <span className="text-sm text-primary font-medium animate-fade-in">
-                  Agreement + PDF ready
+                  Baseline + PDF ready
                 </span>
               )}
             </CardContent>

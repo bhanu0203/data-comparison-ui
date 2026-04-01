@@ -11,8 +11,8 @@ import { MetadataEditor } from '@/components/metadata-editor'
 import { SearchFilterBar } from '@/components/search-filter-bar'
 import {
   LayoutDashboard, Eye, Trash2, Clock, AlertCircle, ArrowRightLeft,
-  RefreshCw, X, GitCompareArrows, CheckSquare, Square, ChevronLeft,
-  ChevronRight, ChevronsLeft, ChevronsRight,
+  RefreshCw, X, Layers, CheckSquare, Square, ChevronLeft,
+  ChevronRight, ChevronsLeft, ChevronsRight, AlertTriangle,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { listComparisons, deleteComparison, rerunComparison, getComparison } from '@/lib/api-service'
@@ -115,14 +115,23 @@ export function RunsPage() {
     }
   }, [runs, fetchRuns])
 
-  const handleDelete = async (id: number) => {
+  // Delete confirmation
+  const [deleteTargetRun, setDeleteTargetRun] = useState<ComparisonRun | null>(null)
+  const [deletingRun, setDeletingRun] = useState(false)
+
+  const confirmDeleteRun = async () => {
+    if (!deleteTargetRun) return
+    setDeletingRun(true)
     try {
-      await deleteComparison(id)
-      selectedIds.delete(id)
+      await deleteComparison(deleteTargetRun.id)
+      selectedIds.delete(deleteTargetRun.id)
       setSelectedIds(new Set(selectedIds))
+      setDeleteTargetRun(null)
       await fetchRuns()
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Delete failed')
+    } finally {
+      setDeletingRun(false)
     }
   }
 
@@ -210,9 +219,9 @@ export function RunsPage() {
           <LayoutDashboard className="w-5 h-5 text-primary" />
         </div>
         <div>
-          <h2 className="text-xl font-bold text-foreground">Comparison Runs</h2>
+          <h2 className="text-xl font-bold text-foreground">Extraction Runs</h2>
           <p className="text-sm text-muted-foreground">
-            Monitor and manage all extraction comparisons
+            Monitor and manage LLM extraction reconciliations
           </p>
         </div>
         <div className="ml-auto flex items-center gap-2">
@@ -222,15 +231,15 @@ export function RunsPage() {
             className="gap-1.5"
             onClick={() => selectionMode ? exitSelectionMode() : setSelectionMode(true)}
           >
-            <GitCompareArrows className="w-3 h-3" />
-            {selectionMode ? 'Cancel Selection' : 'Compare Runs'}
+            <Layers className="w-3 h-3" />
+            {selectionMode ? 'Cancel Selection' : 'Cross-Run Analysis'}
           </Button>
           <Button
             size="sm"
             className="gap-1.5"
-            onClick={() => navigate('/compare')}
+            onClick={() => navigate('/reconcile')}
           >
-            <ArrowRightLeft className="w-3 h-3" /> New Comparison
+            <ArrowRightLeft className="w-3 h-3" /> New Reconciliation
           </Button>
         </div>
       </div>
@@ -261,16 +270,16 @@ export function RunsPage() {
           <CardContent className="py-12 text-center">
             <LayoutDashboard className="w-12 h-12 text-muted-foreground/30 mx-auto mb-3" />
             <p className="text-muted-foreground">
-              {totalCount === 0 ? 'No comparison runs yet' : 'No runs match your filters'}
+              {totalCount === 0 ? 'No extraction runs yet' : 'No runs match your filters'}
             </p>
             {totalCount === 0 && (
               <Button
                 variant="outline"
                 size="sm"
                 className="mt-3 gap-1.5"
-                onClick={() => navigate('/compare')}
+                onClick={() => navigate('/reconcile')}
               >
-                <ArrowRightLeft className="w-3 h-3" /> Start a Comparison
+                <ArrowRightLeft className="w-3 h-3" /> Start a Reconciliation
               </Button>
             )}
           </CardContent>
@@ -395,7 +404,7 @@ export function RunsPage() {
                       variant="ghost"
                       size="icon"
                       className="h-8 w-8 text-destructive/60 hover:text-destructive hover:bg-destructive/10"
-                      onClick={() => handleDelete(run.id)}
+                      onClick={() => setDeleteTargetRun(run)}
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>
@@ -545,7 +554,7 @@ export function RunsPage() {
               disabled={selectedIds.size < 2}
               onClick={handleCompareSelected}
             >
-              <GitCompareArrows className="w-3.5 h-3.5" />
+              <Layers className="w-3.5 h-3.5" />
               Compare{selectedIds.size >= 2 ? ` ${selectedIds.size} Runs` : ''}
             </Button>
             <button
@@ -569,10 +578,10 @@ export function RunsPage() {
               <div>
                 <Dialog.Title className="text-lg font-bold text-foreground flex items-center gap-2">
                   <RefreshCw className="w-5 h-5 text-primary" />
-                  Rerun Comparison
+                  Rerun Extraction
                 </Dialog.Title>
                 <Dialog.Description className="text-sm text-muted-foreground mt-0.5">
-                  Creates a new run from Run #{rerunRunId}. Optionally update the metadata construct below.
+                  Creates a new extraction run from Run #{rerunRunId}. Optionally update the metadata construct below.
                 </Dialog.Description>
               </div>
               <Dialog.Close asChild>
@@ -608,7 +617,7 @@ export function RunsPage() {
 
             <div className="flex items-center justify-between px-6 py-4 border-t bg-muted/10">
               <p className="text-xs text-muted-foreground">
-                A new comparison run will be created with a separate report.
+                A new extraction run will be created with a separate reconciliation report.
               </p>
               <div className="flex items-center gap-2">
                 <Dialog.Close asChild>
@@ -624,6 +633,50 @@ export function RunsPage() {
                   {rerunSubmitting ? 'Creating...' : 'Create Rerun'}
                 </Button>
               </div>
+            </div>
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
+
+      {/* Delete confirmation dialog */}
+      <Dialog.Root open={!!deleteTargetRun} onOpenChange={(open) => { if (!open) setDeleteTargetRun(null) }}>
+        <Dialog.Portal>
+          <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 data-[state=open]:animate-fade-in" />
+          <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-slide-up">
+            <div className="px-6 py-5">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-full bg-destructive/10 flex items-center justify-center shrink-0 mt-0.5">
+                  <AlertTriangle className="w-5 h-5 text-destructive" />
+                </div>
+                <div>
+                  <Dialog.Title className="text-base font-bold text-foreground">
+                    Delete Extraction Run
+                  </Dialog.Title>
+                  <Dialog.Description className="text-sm text-muted-foreground mt-1">
+                    Are you sure you want to delete{' '}
+                    <span className="font-medium text-foreground">
+                      Run #{deleteTargetRun?.id}
+                      {deleteTargetRun?.run_name && ` — ${deleteTargetRun.run_name}`}
+                    </span>
+                    ? This will permanently remove the run and its reconciliation report.
+                  </Dialog.Description>
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center justify-end gap-2 px-6 py-4 border-t bg-muted/10">
+              <Dialog.Close asChild>
+                <Button variant="outline" size="sm">Cancel</Button>
+              </Dialog.Close>
+              <Button
+                size="sm"
+                variant="destructive"
+                className="gap-1.5"
+                onClick={confirmDeleteRun}
+                disabled={deletingRun}
+              >
+                <Trash2 className="w-3 h-3" />
+                {deletingRun ? 'Deleting...' : 'Delete'}
+              </Button>
             </div>
           </Dialog.Content>
         </Dialog.Portal>

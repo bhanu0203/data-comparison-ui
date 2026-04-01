@@ -12,9 +12,9 @@ function App() {
       <NavHeader />
       <main className="max-w-7xl mx-auto px-6 py-8">
         <Routes>
-          <Route path="/" element={<Navigate to="/agreements" replace />} />
-          <Route path="/agreements" element={<AgreementsPage />} />
-          <Route path="/compare" element={<ComparePage />} />
+          <Route path="/" element={<Navigate to="/baselines" replace />} />
+          <Route path="/baselines" element={<AgreementsPage />} />
+          <Route path="/reconcile" element={<ComparePage />} />
           <Route path="/runs" element={<RunsPage />} />
           <Route path="/runs/compare" element={<MultiRunComparisonPage />} />
           <Route path="/runs/:id" element={<RunDetailPage />} />

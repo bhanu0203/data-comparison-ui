@@ -215,6 +215,85 @@ def _simulate_llm_extraction(ground_truth: dict) -> dict:
             if optional in comp and random.random() < 0.4:
                 del comp[optional]
 
+    # 6. ISDA-specific variations
+    if "eventsOfDefault" in result:
+        eod = result["eventsOfDefault"]
+        # Grace period wording variations
+        if "failureToPayOrDeliver" in eod and isinstance(eod["failureToPayOrDeliver"], dict):
+            fp = eod["failureToPayOrDeliver"]
+            if fp.get("gracePeriod") == "3 Local Business Days":
+                fp["gracePeriod"] = "3 business days"
+        if "breachOfAgreement" in eod and isinstance(eod["breachOfAgreement"], dict):
+            ba = eod["breachOfAgreement"]
+            if ba.get("gracePeriod") == "30 days":
+                ba["gracePeriod"] = "thirty (30) days"
+        # Bankruptcy: LLM might miss a trigger or rephrase
+        if "bankruptcy" in eod and isinstance(eod["bankruptcy"], dict):
+            bk = eod["bankruptcy"]
+            if "triggers" in bk and isinstance(bk["triggers"], list) and len(bk["triggers"]) > 3:
+                bk["triggers"] = bk["triggers"][:-1]  # miss last trigger
+            if bk.get("dismissalPeriod") == "15 days (for proceedings instituted against)":
+                bk["dismissalPeriod"] = "15 days"
+
+    if "terminationEvents" in result:
+        te = result["terminationEvents"]
+        # LLM may omit additional termination events
+        te.pop("additionalTerminationEvents", None)
+        # Rephrase tax event
+        if "taxEvent" in te and isinstance(te["taxEvent"], dict):
+            if "substantialLikelihood" in te["taxEvent"]:
+                te["taxEvent"]["substantialLikelihood"] = "Yes"  # type mismatch: bool vs string
+
+    if "earlyTermination" in result:
+        et = result["earlyTermination"]
+        # Notice period wording
+        if "rightToTerminateOnDefault" in et and isinstance(et["rightToTerminateOnDefault"], dict):
+            rt = et["rightToTerminateOnDefault"]
+            if rt.get("noticePeriod") == "Not more than 20 days":
+                rt["noticePeriod"] = "Up to 20 days"
+        # LLM may miss settlement combinations detail
+        et.pop("settlementCombinations", None)
+        # LLM might add an extra field
+        et["terminationCurrency"] = "As specified in Schedule"
+
+    if "representations" in result:
+        rep = result["representations"]
+        # LLM may extract fewer representations
+        if "basicRepresentations" in rep and isinstance(rep["basicRepresentations"], list):
+            if len(rep["basicRepresentations"]) > 3:
+                rep["basicRepresentations"] = rep["basicRepresentations"][:4]  # miss last one
+        # Wording difference
+        if rep.get("absenceOfLitigation") == "No pending or threatened litigation likely to affect legality":
+            rep["absenceOfLitigation"] = "No pending or threatened litigation affecting legality or enforceability"
+
+    if "taxProvisions" in result:
+        tp = result["taxProvisions"]
+        # LLM may simplify definitions
+        if "indemnifiableTax" in tp:
+            tp["indemnifiableTax"] = "Any Tax other than a Tax arising from a present or former connection between the jurisdiction and the recipient"
+
+    if "notices" in result:
+        notices = result["notices"]
+        # LLM might extract fewer notice methods
+        if "methods" in notices and isinstance(notices["methods"], list) and len(notices["methods"]) > 3:
+            notices["methods"] = notices["methods"][:4]  # miss electronic messaging
+
+    if "definitions" in result:
+        defn = result["definitions"]
+        # LLM may miss some definitions or rephrase
+        defn.pop("scheduledPaymentDate", None)
+        defn.pop("terminationCurrency", None)
+        if "defaultRate" in defn:
+            defn["defaultRate"] = "Cost of funding + 1% per annum"
+        if "loss" in defn:
+            defn["loss"] = "Total losses and costs determined in good faith"  # dropped "reasonably"
+
+    if "transferAndAssignment" in result:
+        ta = result["transferAndAssignment"]
+        # LLM might extract only one exception
+        if "exceptions" in ta and isinstance(ta["exceptions"], list) and len(ta["exceptions"]) > 1:
+            ta["exceptions"] = [ta["exceptions"][0]]
+
     return result
 
 
@@ -249,7 +328,13 @@ async def run_comparison(run_id: int) -> None:
 
             # "Extract" data from PDF — simulate LLM extraction based on ground truth
             system_two_data = json.loads(run.system_two_data) if run.system_two_data else {}
-            system_one_result = _simulate_llm_extraction(system_two_data)
+
+            # Use static ISDA mock if this is an ISDA agreement
+            if system_two_data.get("agreement", {}).get("type") == "ISDA Master Agreement":
+                from seed.isda_test_data import ISDA_LLM_OUTPUT
+                system_one_result = copy.deepcopy(ISDA_LLM_OUTPUT)
+            else:
+                system_one_result = _simulate_llm_extraction(system_two_data)
 
             match_pct = compute_match_percentage(system_one_result, system_two_data)
 

@@ -51,17 +51,20 @@ export function ProgressRing({
           }}
         />
       </svg>
-      <div className="absolute flex flex-col items-center">
+      <div
+        className="absolute flex flex-col items-center justify-center"
+        style={{ width: (size - strokeWidth) * 0.75 }}
+      >
         <span
           className="font-bold leading-none"
-          style={{ fontSize: Math.max(10, (size - strokeWidth) * 0.28) }}
+          style={{ fontSize: Math.max(10, (size - strokeWidth) * (label ? 0.22 : 0.28)) }}
         >
           {Math.round(value)}%
         </span>
         {label && (
           <span
-            className="text-muted-foreground leading-none mt-0.5"
-            style={{ fontSize: Math.max(8, (size - strokeWidth) * 0.16) }}
+            className="text-muted-foreground leading-none mt-1 text-center truncate w-full"
+            style={{ fontSize: Math.max(8, (size - strokeWidth) * 0.11) }}
           >
             {label}
           </span>

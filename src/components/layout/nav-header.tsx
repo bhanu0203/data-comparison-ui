@@ -1,11 +1,11 @@
 import { NavLink } from 'react-router-dom'
-import { GitCompareArrows, FileStack, ArrowRightLeft, LayoutDashboard } from 'lucide-react'
+import { Scale, FileStack, ArrowRightLeft, LayoutDashboard } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const navItems = [
-  { to: '/agreements', label: 'Agreements', icon: FileStack },
-  { to: '/compare', label: 'Compare', icon: ArrowRightLeft },
-  { to: '/runs', label: 'Runs', icon: LayoutDashboard },
+  { to: '/baselines', label: 'Baselines', icon: FileStack },
+  { to: '/reconcile', label: 'Reconcile', icon: ArrowRightLeft },
+  { to: '/runs', label: 'Extraction Runs', icon: LayoutDashboard },
 ]
 
 export function NavHeader() {
@@ -15,11 +15,11 @@ export function NavHeader() {
         <div className="flex items-center justify-between">
           <NavLink to="/" className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
-              <GitCompareArrows className="w-5 h-5 text-white" />
+              <Scale className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h1 className="text-lg font-bold text-foreground">DataDiff Pro</h1>
-              <p className="text-xs text-muted-foreground">Multi-System Comparison Engine</p>
+              <h1 className="text-lg font-bold text-foreground">AgreementIQ</h1>
+              <p className="text-xs text-muted-foreground">Agreement Extraction & Reconciliation</p>
             </div>
           </NavLink>
 

@@ -1,32 +1,9 @@
-import { useCallback, useState, useEffect } from 'react'
+import { useCallback, useState, useEffect, useRef } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { FileUp, FileText, X, CheckCircle2 } from 'lucide-react'
+import { FileUp, FileText, X, CheckCircle2, Maximize2, Minimize2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
-
-function extractPdfText(file: File): Promise<string[]> {
-  return new Promise((resolve) => {
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      const text = e.target?.result
-      if (typeof text !== 'string') { resolve([]); return }
-      // Extract text between BT...ET blocks from PDF stream
-      const lines: string[] = []
-      const matches = text.matchAll(/\(([^)]*)\)\s*Tj/g)
-      for (const m of matches) {
-        const line = m[1]
-          .replace(/\\\(/g, '(')
-          .replace(/\\\)/g, ')')
-          .replace(/\\\\/g, '\\')
-          .trim()
-        if (line) lines.push(line)
-      }
-      resolve(lines)
-    }
-    reader.readAsText(file)
-  })
-}
 
 interface PdfUploadProps {
   onFileSelect: (file: File) => void
@@ -35,11 +12,26 @@ interface PdfUploadProps {
 
 export function PdfUpload({ onFileSelect, selectedFile }: PdfUploadProps) {
   const [isDragActive, setIsDragActive] = useState(false)
-  const [previewLines, setPreviewLines] = useState<string[]>([])
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+  const [expanded, setExpanded] = useState(false)
+  const prevUrlRef = useRef<string | null>(null)
 
   useEffect(() => {
-    if (!selectedFile) { setPreviewLines([]); return }
-    extractPdfText(selectedFile).then(setPreviewLines)
+    // Revoke previous object URL to avoid memory leaks
+    if (prevUrlRef.current) URL.revokeObjectURL(prevUrlRef.current)
+
+    if (!selectedFile) {
+      setPreviewUrl(null)
+      prevUrlRef.current = null
+      return
+    }
+    const url = URL.createObjectURL(selectedFile)
+    setPreviewUrl(url)
+    prevUrlRef.current = url
+    return () => {
+      URL.revokeObjectURL(url)
+      prevUrlRef.current = null
+    }
   }, [selectedFile])
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
@@ -64,9 +56,9 @@ export function PdfUpload({ onFileSelect, selectedFile }: PdfUploadProps) {
           <div>
             <CardTitle className="text-base flex items-center gap-2">
               <FileText className="w-4 h-4 text-primary" />
-              PDF Document Upload
+              Agreement PDF
             </CardTitle>
-            <CardDescription className="mt-1">Upload the bank-third party agreement PDF</CardDescription>
+            <CardDescription className="mt-1">Upload the agreement document for LLM extraction</CardDescription>
           </div>
         </div>
       </CardHeader>
@@ -134,31 +126,30 @@ export function PdfUpload({ onFileSelect, selectedFile }: PdfUploadProps) {
             </div>
 
             {/* PDF preview card */}
-            <div className="rounded-xl border bg-muted/30 p-4">
-              <p className="text-xs font-medium text-muted-foreground mb-2 uppercase tracking-wider">Document Preview</p>
-              <div className="bg-white rounded-lg border p-4 space-y-1 font-mono text-xs text-foreground/80 max-h-64 overflow-y-auto diff-scroll">
-                {previewLines.length > 0 ? (
-                  previewLines.map((line, i) => {
-                    // Detect section headings (all-caps lines)
-                    const isHeading = /^[A-Z /&]+$/.test(line) && line.length > 3
-                    const isSubheading = /^[A-Z][a-z].*[/A-Z]/.test(line) && !line.includes(':')
-                    return (
-                      <p
-                        key={i}
-                        className={cn(
-                          isHeading && 'font-bold text-sm text-foreground mt-2',
-                          isSubheading && !isHeading && 'font-semibold text-foreground mt-1.5',
-                        )}
-                      >
-                        {line}
-                      </p>
-                    )
-                  })
-                ) : (
-                  <p className="text-muted-foreground italic">Unable to extract text preview</p>
-                )}
+            {previewUrl && (
+              <div className="rounded-xl border bg-muted/30 p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Document Preview</p>
+                  <button
+                    onClick={() => setExpanded(!expanded)}
+                    className="p-1 rounded-md hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
+                    title={expanded ? 'Collapse preview' : 'Expand preview'}
+                  >
+                    {expanded ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
+                  </button>
+                </div>
+                <div className={cn(
+                  'bg-white rounded-lg border overflow-hidden transition-all duration-300',
+                  expanded ? 'h-[600px]' : 'h-64'
+                )}>
+                  <iframe
+                    src={`${previewUrl}#toolbar=0&navpanes=0`}
+                    className="w-full h-full"
+                    title="PDF Preview"
+                  />
+                </div>
               </div>
-            </div>
+            )}
           </div>
         )}
       </CardContent>

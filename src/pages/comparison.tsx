@@ -14,7 +14,6 @@ import {
   Table2,
   Columns2,
   Code2,
-  Filter,
   Download,
 } from 'lucide-react'
 import type { ExtractionResult, DiffType } from '@/types'
@@ -26,15 +25,6 @@ interface ComparisonProps {
   systemTwoData: ExtractionResult
   matchPercentage?: number | null
 }
-
-const filterOptions: { value: DiffType | 'all'; label: string; color: string }[] = [
-  { value: 'all', label: 'All', color: 'bg-foreground text-background' },
-  { value: 'match', label: 'Matched', color: 'bg-diff-added text-diff-added-text' },
-  { value: 'mismatch', label: 'Mismatched', color: 'bg-diff-changed text-diff-changed-text' },
-  { value: 'missing_left', label: 'Only Sys 2', color: 'bg-blue-100 text-blue-700' },
-  { value: 'missing_right', label: 'Only Sys 1', color: 'bg-purple-100 text-purple-700' },
-  { value: 'type_mismatch', label: 'Type Diff', color: 'bg-diff-removed text-diff-removed-text' },
-]
 
 const viewModes: { value: ViewMode; label: string; icon: typeof TreePine }[] = [
   { value: 'tree', label: 'Tree', icon: TreePine },
@@ -75,9 +65,9 @@ export function ComparisonPage({ systemOneData, systemTwoData, matchPercentage }
           <GitCompareArrows className="w-5 h-5 text-primary" />
         </div>
         <div>
-          <h2 className="text-xl font-bold text-foreground">Comparison & Analysis</h2>
+          <h2 className="text-xl font-bold text-foreground">Reconciliation Report</h2>
           <p className="text-sm text-muted-foreground">
-            Deep diff between System 1 and System 2 outputs
+            Field-level reconciliation of LLM extraction against baseline
           </p>
         </div>
         <Button variant="outline" size="sm" className="ml-auto gap-1.5" onClick={handleExport}>
@@ -85,23 +75,27 @@ export function ComparisonPage({ systemOneData, systemTwoData, matchPercentage }
         </Button>
       </div>
 
-      {/* Summary Dashboard */}
+      {/* Summary Dashboard — stat cards are now clickable filters */}
       <Card>
         <CardContent className="p-6">
-          <SummaryDashboard summary={summary} matchPercentageOverride={matchPercentage} />
+          <SummaryDashboard
+            summary={summary}
+            matchPercentageOverride={matchPercentage}
+            activeFilter={viewMode === 'raw' ? 'all' : filter}
+            onFilterChange={viewMode === 'raw' ? undefined : setFilter}
+          />
         </CardContent>
       </Card>
 
-      {/* View Mode + Filters */}
+      {/* View Mode tabs only — filters are now in the dashboard above */}
       <div className="flex flex-wrap items-center gap-4">
-        {/* View mode tabs */}
         <div className="flex items-center bg-muted rounded-lg p-1 gap-0.5">
           {viewModes.map(mode => {
             const Icon = mode.icon
             return (
               <button
                 key={mode.value}
-                onClick={() => setViewMode(mode.value)}
+                onClick={() => { setViewMode(mode.value); if (mode.value === 'raw') setFilter('all') }}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
                   viewMode === mode.value
                     ? 'bg-white shadow-sm text-foreground'
@@ -115,25 +109,18 @@ export function ComparisonPage({ systemOneData, systemTwoData, matchPercentage }
           })}
         </div>
 
-        {/* Filters */}
-        {viewMode !== 'raw' && (
+        {/* Active filter indicator */}
+        {filter !== 'all' && viewMode !== 'raw' && (
           <div className="flex items-center gap-2">
-            <Filter className="w-4 h-4 text-muted-foreground" />
-            <div className="flex gap-1.5">
-              {filterOptions.map(opt => (
-                <button
-                  key={opt.value}
-                  onClick={() => setFilter(opt.value)}
-                  className={`px-2.5 py-1 rounded-full text-xs font-medium transition-all ${
-                    filter === opt.value
-                      ? opt.color + ' shadow-sm'
-                      : 'bg-muted text-muted-foreground hover:bg-muted/80'
-                  }`}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
+            <Badge variant="secondary" className="gap-1.5 pl-2 pr-1.5 py-1 text-xs">
+              Filtering: {filter === 'match' ? 'Matched' : filter === 'mismatch' ? 'Mismatched' : filter === 'missing_left' ? 'Baseline Only' : filter === 'missing_right' ? 'LLM Only' : 'Type Mismatch'}
+              <button
+                onClick={() => setFilter('all')}
+                className="ml-0.5 p-0.5 rounded-full hover:bg-muted-foreground/20 transition-colors"
+              >
+                <span className="text-[10px]">✕</span>
+              </button>
+            </Badge>
           </div>
         )}
       </div>
@@ -156,8 +143,8 @@ export function ComparisonPage({ systemOneData, systemTwoData, matchPercentage }
             <RawDiffViewer
               leftData={systemOneData}
               rightData={systemTwoData}
-              leftLabel="System 1 — PDF Extraction"
-              rightLabel="System 2 — Direct Extraction"
+              leftLabel="LLM Extraction"
+              rightLabel="Baseline (Ground Truth)"
             />
           )}
         </CardContent>

@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 import {
   Search, ChevronsUpDown, Check, FileStack, X,
-  ArrowUpDown, Clock, Hash, SortAsc,
+  ArrowUpDown, Clock, Hash, SortAsc, ArrowUp, ArrowDown,
 } from 'lucide-react'
 import type { Agreement } from '@/types'
 
@@ -96,6 +96,7 @@ export function AgreementPicker({
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
   const [sortKey, setSortKey] = useState<SortKey>('name')
+  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc')
   const [focusIndex, setFocusIndex] = useState(0)
   const inputRef = useRef<HTMLInputElement>(null)
   const listRef = useListRef(null)
@@ -132,29 +133,30 @@ export function AgreementPicker({
           String(a.field_count).includes(q)
       )
     }
+    const dir = sortDir === 'asc' ? 1 : -1
     const sorted = [...items]
     switch (sortKey) {
       case 'name':
-        sorted.sort((a, b) => a.name.localeCompare(b.name))
+        sorted.sort((a, b) => dir * a.name.localeCompare(b.name))
         break
       case 'date':
-        sorted.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+        sorted.sort((a, b) => dir * (new Date(a.created_at).getTime() - new Date(b.created_at).getTime()))
         break
       case 'fields':
-        sorted.sort((a, b) => b.field_count - a.field_count)
+        sorted.sort((a, b) => dir * (a.field_count - b.field_count))
         break
       case 'id':
-        sorted.sort((a, b) => a.agreement_id.localeCompare(b.agreement_id))
+        sorted.sort((a, b) => dir * a.agreement_id.localeCompare(b.agreement_id))
         break
     }
     return sorted
-  }, [agreements, query, sortKey])
+  }, [agreements, query, sortKey, sortDir])
 
   // Reset focus index when filter changes
   useEffect(() => {
     setFocusIndex(0)
     listRef.current?.scrollToRow({ index: 0 })
-  }, [query, sortKey, listRef])
+  }, [query, sortKey, sortDir, listRef])
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
@@ -245,31 +247,46 @@ export function AgreementPicker({
 
   return (
     <div ref={containerRef} className="relative" onKeyDown={handleKeyDown}>
-      {/* Trigger button */}
+      {/* Trigger — styled as a clear dropdown control */}
       <button
         type="button"
         onClick={() => setOpen(!open)}
         className={cn(
-          'w-full flex items-center gap-3 px-4 py-3 rounded-lg border text-left transition-all',
+          'w-full flex items-center gap-3 px-4 py-2.5 rounded-lg border text-left transition-all',
           open
             ? 'border-primary ring-2 ring-primary/20 bg-white'
-            : 'border-border hover:border-primary/40 bg-white',
+            : 'border-border hover:border-primary/40 bg-white shadow-sm',
           !selected && 'text-muted-foreground'
         )}
       >
-        <FileStack className={cn('w-5 h-5 shrink-0', selected ? 'text-primary' : 'text-muted-foreground/50')} />
         {selected ? (
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-semibold text-foreground truncate">{selected.name}</span>
-              <Badge variant="secondary" className="text-[10px]">{selected.agreement_id}</Badge>
+          <>
+            <div className={cn(
+              'w-7 h-7 rounded-md flex items-center justify-center shrink-0 text-xs font-bold',
+              'bg-gradient-to-br from-primary/15 to-primary/5 text-primary',
+            )}>
+              {selected.name.charAt(0).toUpperCase()}
             </div>
-            <span className="text-xs text-muted-foreground">{selected.field_count} fields</span>
-          </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium text-foreground truncate">{selected.name}</span>
+                <Badge variant="outline" className="text-[10px] font-mono bg-muted/40">{selected.agreement_id}</Badge>
+              </div>
+              <span className="text-[11px] text-muted-foreground">{selected.field_count} fields</span>
+            </div>
+          </>
         ) : (
-          <span className="flex-1 text-sm">Select an agreement...</span>
+          <>
+            <Search className="w-4 h-4 text-muted-foreground/50 shrink-0" />
+            <span className="flex-1 text-sm">Choose a baseline agreement...</span>
+          </>
         )}
-        <ChevronsUpDown className="w-4 h-4 text-muted-foreground shrink-0" />
+        <div className={cn(
+          'flex items-center gap-1.5 shrink-0 pl-3 border-l',
+          open ? 'border-primary/20' : 'border-border',
+        )}>
+          <ChevronsUpDown className="w-4 h-4 text-muted-foreground" />
+        </div>
       </button>
 
       {/* Dropdown */}
@@ -303,8 +320,18 @@ export function AgreementPicker({
                 const Icon = opt.icon
                 return (
                   <button
+                    type="button"
                     key={opt.key}
-                    onClick={() => setSortKey(opt.key)}
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => {
+                      if (sortKey === opt.key) {
+                        setSortDir(d => d === 'asc' ? 'desc' : 'asc')
+                      } else {
+                        setSortKey(opt.key)
+                        setSortDir('asc')
+                      }
+                      inputRef.current?.focus()
+                    }}
                     className={cn(
                       'flex items-center gap-1 px-2 py-1 rounded text-[11px] font-medium transition-colors',
                       sortKey === opt.key
@@ -314,6 +341,11 @@ export function AgreementPicker({
                   >
                     <Icon className="w-3 h-3" />
                     {opt.label}
+                    {sortKey === opt.key && (
+                      sortDir === 'asc'
+                        ? <ArrowUp className="w-2.5 h-2.5" />
+                        : <ArrowDown className="w-2.5 h-2.5" />
+                    )}
                   </button>
                 )
               })}
@@ -328,6 +360,7 @@ export function AgreementPicker({
           {/* Virtualized list */}
           {filtered.length > 0 ? (
             <List<RowExtraProps>
+              key={`${sortKey}-${sortDir}-${query}-${filtered.length}`}
               listRef={listRef}
               rowComponent={AgreementRow}
               rowCount={filtered.length}

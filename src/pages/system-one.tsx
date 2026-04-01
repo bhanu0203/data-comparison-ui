@@ -57,7 +57,7 @@ export function SystemOnePage({ onComplete, result }: SystemOneProps) {
             <CheckCircle2 className="w-5 h-5 text-success" />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-foreground">System 1 — Extraction Complete</h2>
+            <h2 className="text-xl font-bold text-foreground">LLM Extraction Complete</h2>
             <p className="text-sm text-muted-foreground">Data extracted from PDF via LLM</p>
           </div>
           <Button variant="outline" size="sm" className="ml-auto gap-1.5" onClick={handleReset}>
@@ -149,7 +149,7 @@ export function SystemOnePage({ onComplete, result }: SystemOneProps) {
       <Card className="animate-slide-up">
         <CardContent className="p-0">
           <ProcessingAnimation
-            systemName="System 1 — LLM Extraction"
+            systemName="LLM Extraction"
             steps={[
               'Parsing PDF document...',
               'Applying metadata schema to LLM...',
@@ -169,7 +169,7 @@ export function SystemOnePage({ onComplete, result }: SystemOneProps) {
           <FileText className="w-5 h-5 text-primary" />
         </div>
         <div>
-          <h2 className="text-xl font-bold text-foreground">System 1 — PDF Extraction</h2>
+          <h2 className="text-xl font-bold text-foreground">LLM Extraction</h2>
           <p className="text-sm text-muted-foreground">Upload a PDF and define extraction metadata</p>
         </div>
         <Button

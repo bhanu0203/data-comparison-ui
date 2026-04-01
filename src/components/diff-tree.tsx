@@ -10,12 +10,12 @@ interface DiffTreeProps {
 }
 
 const diffConfig: Record<DiffType, { icon: typeof Equal; label: string; bg: string; text: string; badgeVariant: 'success' | 'error' | 'warning' | 'secondary' }> = {
-  match: { icon: Equal, label: 'Match', bg: 'bg-diff-added/40', text: 'text-diff-added-text', badgeVariant: 'success' },
-  mismatch: { icon: ArrowLeftRight, label: 'Mismatch', bg: 'bg-diff-changed/40', text: 'text-diff-changed-text', badgeVariant: 'warning' },
-  missing_left: { icon: Plus, label: 'Only in System 2', bg: 'bg-blue-50', text: 'text-blue-600', badgeVariant: 'secondary' },
-  missing_right: { icon: Minus, label: 'Only in System 1', bg: 'bg-purple-50', text: 'text-purple-600', badgeVariant: 'secondary' },
-  type_mismatch: { icon: AlertTriangle, label: 'Type Mismatch', bg: 'bg-diff-removed/40', text: 'text-diff-removed-text', badgeVariant: 'error' },
-  structural: { icon: ArrowLeftRight, label: 'Has Changes', bg: 'bg-diff-changed/20', text: 'text-diff-changed-text', badgeVariant: 'warning' },
+  match: { icon: Equal, label: 'Match', bg: 'bg-emerald-50', text: 'text-emerald-600', badgeVariant: 'success' },
+  mismatch: { icon: ArrowLeftRight, label: 'Mismatch', bg: 'bg-amber-50', text: 'text-amber-600', badgeVariant: 'warning' },
+  missing_left: { icon: Plus, label: 'Baseline Only', bg: 'bg-blue-50', text: 'text-blue-600', badgeVariant: 'secondary' },
+  missing_right: { icon: Minus, label: 'LLM Only', bg: 'bg-purple-50', text: 'text-purple-600', badgeVariant: 'secondary' },
+  type_mismatch: { icon: AlertTriangle, label: 'Type Mismatch', bg: 'bg-rose-50', text: 'text-rose-600', badgeVariant: 'error' },
+  structural: { icon: ArrowLeftRight, label: 'Has Changes', bg: 'bg-amber-50/50', text: 'text-amber-600', badgeVariant: 'warning' },
 }
 
 function formatValue(val: unknown): string {
@@ -25,22 +25,24 @@ function formatValue(val: unknown): string {
   return String(val)
 }
 
+// Recursively check if a subtree contains any leaf node matching the filter
+function hasMatchingLeaf(entry: DiffEntry, filter: DiffType): boolean {
+  if (entry.children && entry.children.length > 0) {
+    return entry.children.some(c => hasMatchingLeaf(c, filter))
+  }
+  return entry.diffType === filter
+}
+
 function DiffNode({ entry, filter, depth = 0 }: { entry: DiffEntry; filter: DiffType | 'all'; depth?: number }) {
   const [isOpen, setIsOpen] = useState(entry.diffType !== 'match')
   const config = diffConfig[entry.diffType]
   const Icon = config.icon
   const hasChildren = entry.children && entry.children.length > 0
 
-  // Filter logic
+  // Filter logic: hide nodes that don't contain any matching leaves
   if (filter !== 'all') {
     if (!hasChildren && entry.diffType !== filter) return null
-    if (hasChildren) {
-      const filteredChildren = entry.children!.filter(c => {
-        if (c.children?.length) return true
-        return c.diffType === filter
-      })
-      if (filteredChildren.length === 0 && entry.diffType !== filter) return null
-    }
+    if (hasChildren && !hasMatchingLeaf(entry, filter)) return null
   }
 
   return (
@@ -70,14 +72,16 @@ function DiffNode({ entry, filter, depth = 0 }: { entry: DiffEntry; filter: Diff
           <div className="flex items-center gap-2 flex-1 min-w-0">
             <span className={cn(
               'text-xs font-mono truncate max-w-[200px] px-2 py-0.5 rounded',
-              entry.diffType === 'missing_left' ? 'bg-muted text-muted-foreground line-through' : 'bg-red-50 text-red-700'
+              entry.diffType === 'missing_left' ? 'bg-muted text-muted-foreground line-through' :
+              entry.diffType === 'type_mismatch' ? 'bg-rose-50 text-rose-700' : 'bg-amber-50 text-amber-700'
             )}>
               {formatValue(entry.leftValue)}
             </span>
             <ArrowLeftRight className="w-3 h-3 text-muted-foreground flex-shrink-0" />
             <span className={cn(
               'text-xs font-mono truncate max-w-[200px] px-2 py-0.5 rounded',
-              entry.diffType === 'missing_right' ? 'bg-muted text-muted-foreground line-through' : 'bg-green-50 text-green-700'
+              entry.diffType === 'missing_right' ? 'bg-muted text-muted-foreground line-through' :
+              entry.diffType === 'type_mismatch' ? 'bg-rose-50 text-rose-700' : 'bg-emerald-50 text-emerald-700'
             )}>
               {formatValue(entry.rightValue)}
             </span>

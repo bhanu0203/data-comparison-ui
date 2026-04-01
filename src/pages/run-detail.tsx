@@ -257,7 +257,7 @@ export function RunDetailPage() {
                   <div className="w-16 h-16 rounded-full bg-destructive/10 flex items-center justify-center mx-auto mb-4">
                     <AlertCircle className="w-8 h-8 text-destructive" />
                   </div>
-                  <h3 className="text-lg font-bold text-destructive">Comparison Failed</h3>
+                  <h3 className="text-lg font-bold text-destructive">Extraction Failed</h3>
                   {run.error_message && (
                     <p className="text-sm text-muted-foreground mt-2">{run.error_message}</p>
                   )}
@@ -267,7 +267,7 @@ export function RunDetailPage() {
                   <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
                     <RefreshCw className="w-8 h-8 text-primary animate-spin" />
                   </div>
-                  <h3 className="text-lg font-bold text-foreground">Processing Comparison</h3>
+                  <h3 className="text-lg font-bold text-foreground">Processing Extraction</h3>
                   <p className="text-sm text-muted-foreground mt-1">
                     {STAGE_LABELS[run.current_stage] || run.current_stage}
                   </p>

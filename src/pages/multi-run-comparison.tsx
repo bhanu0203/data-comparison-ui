@@ -29,8 +29,8 @@ const DIFF_COLORS: Record<DiffType, string> = {
 const DIFF_LABELS: Record<DiffType, string> = {
   match: 'Match',
   mismatch: 'Mismatch',
-  missing_left: 'Only Sys 2',
-  missing_right: 'Only Sys 1',
+  missing_left: 'Baseline Only',
+  missing_right: 'LLM Only',
   type_mismatch: 'Type Diff',
   structural: 'Structural',
 }
@@ -423,13 +423,13 @@ function FieldRow({
           {field.values.map((v) => (
             <div key={v.runId} className="text-xs space-y-1 px-2">
               <div className="flex items-center gap-1">
-                <span className="text-[10px] text-muted-foreground w-10 shrink-0">Sys 1:</span>
+                <span className="text-[10px] text-muted-foreground w-10 shrink-0">LLM:</span>
                 <span className="font-mono text-[11px] truncate bg-muted/40 rounded px-1.5 py-0.5" title={formatValue(v.systemOneValue)}>
                   {formatValue(v.systemOneValue)}
                 </span>
               </div>
               <div className="flex items-center gap-1">
-                <span className="text-[10px] text-muted-foreground w-10 shrink-0">Sys 2:</span>
+                <span className="text-[10px] text-muted-foreground w-10 shrink-0">Base:</span>
                 <span className="font-mono text-[11px] truncate bg-muted/40 rounded px-1.5 py-0.5" title={formatValue(v.systemTwoValue)}>
                   {formatValue(v.systemTwoValue)}
                 </span>

@@ -10,10 +10,10 @@ interface SideBySideProps {
 
 const bgMap: Record<DiffType, [string, string]> = {
   match: ['', ''],
-  mismatch: ['bg-red-50/60', 'bg-green-50/60'],
+  mismatch: ['bg-amber-50/60', 'bg-amber-50/60'],
   missing_left: ['bg-gray-50', 'bg-blue-50/60'],
   missing_right: ['bg-purple-50/60', 'bg-gray-50'],
-  type_mismatch: ['bg-red-50/60', 'bg-amber-50/60'],
+  type_mismatch: ['bg-rose-50/60', 'bg-rose-50/60'],
   structural: ['', ''],
 }
 
@@ -52,7 +52,8 @@ function SideBySideNode({ entry, depth, filter }: { entry: DiffEntry; depth: num
             <span className={cn(
               'truncate',
               entry.diffType === 'missing_left' ? 'text-muted-foreground italic' :
-              entry.diffType === 'mismatch' || entry.diffType === 'type_mismatch' ? 'text-red-700 line-through' :
+              entry.diffType === 'type_mismatch' ? 'text-rose-700 line-through' :
+              entry.diffType === 'mismatch' ? 'text-amber-700 line-through' :
               'text-foreground'
             )}>
               : {formatVal(entry.leftValue)}
@@ -74,7 +75,8 @@ function SideBySideNode({ entry, depth, filter }: { entry: DiffEntry; depth: num
             <span className={cn(
               'truncate',
               entry.diffType === 'missing_right' ? 'text-muted-foreground italic' :
-              entry.diffType === 'mismatch' || entry.diffType === 'type_mismatch' ? 'text-green-700 font-semibold' :
+              entry.diffType === 'type_mismatch' ? 'text-rose-700 font-semibold' :
+              entry.diffType === 'mismatch' ? 'text-amber-700 font-semibold' :
               'text-foreground'
             )}>
               : {formatVal(entry.rightValue)}
@@ -97,11 +99,11 @@ export function SideBySide({ entries, filter }: SideBySideProps) {
       {/* Header */}
       <div className="grid grid-cols-[1fr,1px,1fr] border-b bg-muted/40">
         <div className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-          System 1 — PDF Extraction
+          LLM Extraction
         </div>
         <div className="bg-border" />
         <div className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-          System 2 — Direct Extraction
+          Baseline (Ground Truth)
         </div>
       </div>
 

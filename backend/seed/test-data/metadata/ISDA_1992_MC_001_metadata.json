@@ -1,0 +1,306 @@
+{
+  "name": "1992 ISDA Master Agreement Extraction Schema",
+  "version": "1.0",
+  "fields": [
+    {
+      "fieldName": "Agreement ID",
+      "jsonPath": "agreement.id",
+      "description": "Unique identifier for the ISDA Master Agreement",
+      "type": "string"
+    },
+    {
+      "fieldName": "Agreement Type",
+      "jsonPath": "agreement.type",
+      "description": "Type of agreement (ISDA Master Agreement)",
+      "type": "string"
+    },
+    {
+      "fieldName": "Agreement Sub-Type",
+      "jsonPath": "agreement.subType",
+      "description": "Variant (e.g., Multicurrency - Cross Border, Single Currency)",
+      "type": "string"
+    },
+    {
+      "fieldName": "ISDA Version",
+      "jsonPath": "agreement.version",
+      "description": "Year version of the ISDA Master Agreement (1992 or 2002)",
+      "type": "string"
+    },
+    {
+      "fieldName": "Status",
+      "jsonPath": "agreement.status",
+      "description": "Current status of the agreement",
+      "type": "string"
+    },
+    {
+      "fieldName": "Effective Date",
+      "jsonPath": "agreement.effectiveDate",
+      "description": "Date the agreement becomes effective",
+      "type": "date"
+    },
+    {
+      "fieldName": "Governing Body",
+      "jsonPath": "agreement.governingBody",
+      "description": "Organization governing the agreement (ISDA)",
+      "type": "string"
+    },
+    {
+      "fieldName": "Single Agreement Clause",
+      "jsonPath": "agreement.singleAgreementClause",
+      "description": "Whether all Transactions form a single agreement",
+      "type": "boolean"
+    },
+    {
+      "fieldName": "Party A Name",
+      "jsonPath": "parties.partyA.name",
+      "description": "Legal name of Party A",
+      "type": "string"
+    },
+    {
+      "fieldName": "Party A Jurisdiction",
+      "jsonPath": "parties.partyA.jurisdiction",
+      "description": "Jurisdiction of Party A",
+      "type": "string"
+    },
+    {
+      "fieldName": "Party B Name",
+      "jsonPath": "parties.partyB.name",
+      "description": "Legal name of Party B",
+      "type": "string"
+    },
+    {
+      "fieldName": "Party B Jurisdiction",
+      "jsonPath": "parties.partyB.jurisdiction",
+      "description": "Jurisdiction of Party B",
+      "type": "string"
+    },
+    {
+      "fieldName": "Net Payments",
+      "jsonPath": "obligations.paymentConditions.netPayments",
+      "description": "Whether netting of payments applies",
+      "type": "boolean"
+    },
+    {
+      "fieldName": "Payment Currency",
+      "jsonPath": "obligations.paymentConditions.paymentCurrency",
+      "description": "Currency for payments",
+      "type": "string"
+    },
+    {
+      "fieldName": "Payment Method",
+      "jsonPath": "obligations.paymentConditions.paymentMethod",
+      "description": "Method of payment (freely transferable funds)",
+      "type": "string"
+    },
+    {
+      "fieldName": "Default Interest Rate",
+      "jsonPath": "obligations.defaultInterestRate",
+      "description": "Interest rate on overdue amounts",
+      "type": "string"
+    },
+    {
+      "fieldName": "Default Interest Basis",
+      "jsonPath": "obligations.defaultInterestBasis",
+      "description": "Compounding basis for default interest",
+      "type": "string"
+    },
+    {
+      "fieldName": "Basic Representations",
+      "jsonPath": "representations.basicRepresentations",
+      "description": "List of standard representations made by each party",
+      "type": "array"
+    },
+    {
+      "fieldName": "Absence of Certain Events",
+      "jsonPath": "representations.absenceOfCertainEvents",
+      "description": "Representation that no Event of Default is continuing",
+      "type": "string"
+    },
+    {
+      "fieldName": "Absence of Litigation",
+      "jsonPath": "representations.absenceOfLitigation",
+      "description": "Representation regarding pending litigation",
+      "type": "string"
+    },
+    {
+      "fieldName": "Gross-Up Required",
+      "jsonPath": "taxProvisions.grossUpRequired",
+      "description": "Whether gross-up for withholding tax is required",
+      "type": "boolean"
+    },
+    {
+      "fieldName": "Indemnifiable Tax Definition",
+      "jsonPath": "taxProvisions.indemnifiableTax",
+      "description": "Definition of Indemnifiable Tax",
+      "type": "string"
+    },
+    {
+      "fieldName": "Stamp Tax Responsibility",
+      "jsonPath": "taxProvisions.stampTaxResponsibility",
+      "description": "Allocation of stamp tax obligations",
+      "type": "string"
+    },
+    {
+      "fieldName": "Failure to Pay Grace Period",
+      "jsonPath": "eventsOfDefault.failureToPayOrDeliver.gracePeriod",
+      "description": "Grace period for failure to pay or deliver",
+      "type": "string"
+    },
+    {
+      "fieldName": "Breach of Agreement Grace Period",
+      "jsonPath": "eventsOfDefault.breachOfAgreement.gracePeriod",
+      "description": "Grace period for breach of agreement",
+      "type": "string"
+    },
+    {
+      "fieldName": "Cross Default Threshold",
+      "jsonPath": "eventsOfDefault.crossDefault.thresholdAmount",
+      "description": "Threshold Amount for cross-default trigger",
+      "type": "string"
+    },
+    {
+      "fieldName": "Bankruptcy Triggers",
+      "jsonPath": "eventsOfDefault.bankruptcy.triggers",
+      "description": "Events constituting bankruptcy Event of Default",
+      "type": "array"
+    },
+    {
+      "fieldName": "Bankruptcy Dismissal Period",
+      "jsonPath": "eventsOfDefault.bankruptcy.dismissalPeriod",
+      "description": "Period for dismissal of bankruptcy proceedings",
+      "type": "string"
+    },
+    {
+      "fieldName": "Illegality",
+      "jsonPath": "terminationEvents.illegality.description",
+      "description": "Description of the Illegality termination event",
+      "type": "string"
+    },
+    {
+      "fieldName": "Tax Event",
+      "jsonPath": "terminationEvents.taxEvent.description",
+      "description": "Description of the Tax Event termination event",
+      "type": "string"
+    },
+    {
+      "fieldName": "Tax Event Upon Merger",
+      "jsonPath": "terminationEvents.taxEventUponMerger.description",
+      "description": "Tax Event arising from merger",
+      "type": "string"
+    },
+    {
+      "fieldName": "Credit Event Upon Merger",
+      "jsonPath": "terminationEvents.creditEventUponMerger.description",
+      "description": "Credit deterioration after merger",
+      "type": "string"
+    },
+    {
+      "fieldName": "Termination Notice Period",
+      "jsonPath": "earlyTermination.rightToTerminateOnDefault.noticePeriod",
+      "description": "Notice period for early termination on default",
+      "type": "string"
+    },
+    {
+      "fieldName": "Automatic Early Termination",
+      "jsonPath": "earlyTermination.automaticEarlyTermination",
+      "description": "Whether automatic early termination applies",
+      "type": "string"
+    },
+    {
+      "fieldName": "Payment Methods",
+      "jsonPath": "earlyTermination.paymentMethods",
+      "description": "Methods for calculating termination payments (Market Quotation/Loss)",
+      "type": "array"
+    },
+    {
+      "fieldName": "Settlement Methods",
+      "jsonPath": "earlyTermination.settlementMethods",
+      "description": "Settlement methods (First Method/Second Method)",
+      "type": "array"
+    },
+    {
+      "fieldName": "Set-Off Rights",
+      "jsonPath": "earlyTermination.setOffRights",
+      "description": "Whether set-off rights apply",
+      "type": "boolean"
+    },
+    {
+      "fieldName": "Transfer Consent Required",
+      "jsonPath": "transferAndAssignment.consentRequired",
+      "description": "Whether prior written consent is needed for transfer",
+      "type": "boolean"
+    },
+    {
+      "fieldName": "Transfer Exceptions",
+      "jsonPath": "transferAndAssignment.exceptions",
+      "description": "Exceptions to the transfer consent requirement",
+      "type": "array"
+    },
+    {
+      "fieldName": "Governing Law",
+      "jsonPath": "governingLawAndJurisdiction.governingLaw",
+      "description": "Governing law of the agreement",
+      "type": "string"
+    },
+    {
+      "fieldName": "Waiver of Immunities",
+      "jsonPath": "governingLawAndJurisdiction.waiverOfImmunities",
+      "description": "Whether parties waive sovereign immunity",
+      "type": "boolean"
+    },
+    {
+      "fieldName": "Notice Methods",
+      "jsonPath": "notices.methods",
+      "description": "Permitted methods for giving notices",
+      "type": "array"
+    },
+    {
+      "fieldName": "Notice Restrictions",
+      "jsonPath": "notices.restrictions",
+      "description": "Restrictions on notice delivery for certain sections",
+      "type": "string"
+    },
+    {
+      "fieldName": "Entire Agreement Clause",
+      "jsonPath": "miscellaneous.entireAgreement",
+      "description": "Whether this constitutes the entire agreement",
+      "type": "boolean"
+    },
+    {
+      "fieldName": "Amendment Requirement",
+      "jsonPath": "miscellaneous.amendmentRequirement",
+      "description": "Requirements for amending the agreement",
+      "type": "string"
+    },
+    {
+      "fieldName": "Survival of Obligations",
+      "jsonPath": "miscellaneous.survivalOfObligations",
+      "description": "Whether obligations survive termination",
+      "type": "boolean"
+    },
+    {
+      "fieldName": "Default Rate Definition",
+      "jsonPath": "definitions.defaultRate",
+      "description": "Definition of the Default Rate",
+      "type": "string"
+    },
+    {
+      "fieldName": "Specified Transaction Definition",
+      "jsonPath": "definitions.specifiedTransaction",
+      "description": "Definition of Specified Transaction",
+      "type": "string"
+    },
+    {
+      "fieldName": "Loss Definition",
+      "jsonPath": "definitions.loss",
+      "description": "Definition of Loss for settlement calculation",
+      "type": "string"
+    },
+    {
+      "fieldName": "Market Quotation Definition",
+      "jsonPath": "definitions.marketQuotation",
+      "description": "Definition of Market Quotation",
+      "type": "string"
+    }
+  ]
+}

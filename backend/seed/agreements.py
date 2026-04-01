@@ -1,9 +1,11 @@
 """
-10 Bank–Third Party Agreement baseline JSONs (ground truth).
+11 Bank–Third Party Agreement baseline JSONs (ground truth).
 
 Each agreement represents a different type of financial services contract
 with realistic data covering diverse banks, vendors, terms, and compliance profiles.
 """
+
+from seed.isda_test_data import ISDA_AGREEMENT
 
 AGREEMENTS = [
     # ── 1. SLA – First National Bank ↔ TechServe Solutions ──
@@ -903,4 +905,7 @@ AGREEMENTS = [
             },
         },
     },
+
+    # ── 11. ISDA Master Agreement ──
+    ISDA_AGREEMENT,
 ]
