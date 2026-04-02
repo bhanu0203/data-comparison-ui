@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { createPortal } from 'react-dom'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import * as Dialog from '@radix-ui/react-dialog'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -54,6 +54,7 @@ const PAGE_SIZE_OPTIONS = [10, 25, 50, 100]
 
 export function RunsPage() {
   const navigate = useNavigate()
+  const location = useLocation()
   const [runs, setRuns] = useState<ComparisonRun[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -100,6 +101,15 @@ export function RunsPage() {
   useEffect(() => {
     fetchRuns()
   }, [fetchRuns])
+
+  // Re-fetch when navigating to this page (e.g. clicking nav link while already on /runs)
+  const refreshKey = (location.state as { refreshKey?: number } | null)?.refreshKey
+  useEffect(() => {
+    if (refreshKey) {
+      setLoading(true)
+      fetchRuns()
+    }
+  }, [refreshKey])
 
   // Auto-refresh when in-progress runs exist
   useEffect(() => {
@@ -581,7 +591,7 @@ export function RunsPage() {
                   Rerun Extraction
                 </Dialog.Title>
                 <Dialog.Description className="text-sm text-muted-foreground mt-0.5">
-                  Creates a new extraction run from Run #{rerunRunId}. Optionally update the metadata construct below.
+                  Creates a new extraction run from Run #{rerunRunId}.
                 </Dialog.Description>
               </div>
               <Dialog.Close asChild>
@@ -605,14 +615,6 @@ export function RunsPage() {
                 />
               </div>
 
-              {rerunFetching ? (
-                <div className="py-12 text-center">
-                  <RefreshCw className="w-6 h-6 text-primary animate-spin mx-auto mb-2" />
-                  <span className="text-sm text-muted-foreground">Loading metadata construct...</span>
-                </div>
-              ) : rerunMetadata ? (
-                <MetadataEditor metadata={rerunMetadata} onChange={setRerunMetadata} />
-              ) : null}
             </div>
 
             <div className="flex items-center justify-between px-6 py-4 border-t bg-muted/10">

@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { PdfUpload } from '@/components/pdf-upload'
-import { MetadataEditor } from '@/components/metadata-editor'
 import { ProcessingAnimation } from '@/components/processing-animation'
 import { JsonViewer } from '@/components/json-viewer'
 import { Button } from '@/components/ui/button'
@@ -74,9 +73,6 @@ export function SystemOnePage({ onComplete, result }: SystemOneProps) {
                 <Badge variant="secondary" className="text-[10px] font-normal">
                   {file?.name}
                 </Badge>
-                <Badge variant="secondary" className="text-[10px] font-normal">
-                  {metadata.fields.length} fields in schema
-                </Badge>
               </CardTitle>
               <button
                 onClick={() => setShowInputSummary(!showInputSummary)}
@@ -88,51 +84,21 @@ export function SystemOnePage({ onComplete, result }: SystemOneProps) {
           </CardHeader>
           {showInputSummary && (
             <CardContent className="px-4 pb-4 pt-0">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="rounded-lg border bg-white p-3">
-                  <p className="text-xs font-semibold text-muted-foreground mb-2">PDF Document</p>
-                  <div className="space-y-1 text-xs">
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">File</span>
-                      <span className="font-mono font-medium">{file?.name}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Size</span>
-                      <span className="font-mono">{file ? (file.size / 1024).toFixed(1) + ' KB' : '—'}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Type</span>
-                      <span className="font-mono">application/pdf</span>
-                    </div>
+              <div className="rounded-lg border bg-white p-3">
+                <p className="text-xs font-semibold text-muted-foreground mb-2">PDF Document</p>
+                <div className="space-y-1 text-xs">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">File</span>
+                    <span className="font-mono font-medium">{file?.name}</span>
                   </div>
-                </div>
-                <div className="rounded-lg border bg-white p-3">
-                  <p className="text-xs font-semibold text-muted-foreground mb-2">Metadata Schema</p>
-                  <div className="space-y-1 text-xs">
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Schema</span>
-                      <span className="font-mono font-medium">{metadata.name}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Version</span>
-                      <span className="font-mono">{metadata.version}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Fields</span>
-                      <span className="font-mono">{metadata.fields.length} defined</span>
-                    </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Size</span>
+                    <span className="font-mono">{file ? (file.size / 1024).toFixed(1) + ' KB' : '—'}</span>
                   </div>
-                </div>
-              </div>
-              <div className="mt-3 rounded-lg border bg-white p-3">
-                <p className="text-xs font-semibold text-muted-foreground mb-2">Extraction Fields</p>
-                <div className="flex flex-wrap gap-1.5">
-                  {metadata.fields.map((f, i) => (
-                    <span key={i} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-muted text-xs">
-                      <span className="font-medium text-foreground">{f.fieldName}</span>
-                      <span className="text-muted-foreground font-mono text-[10px]">{f.type}</span>
-                    </span>
-                  ))}
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Type</span>
+                    <span className="font-mono">application/pdf</span>
+                  </div>
                 </div>
               </div>
             </CardContent>
@@ -170,7 +136,7 @@ export function SystemOnePage({ onComplete, result }: SystemOneProps) {
         </div>
         <div>
           <h2 className="text-xl font-bold text-foreground">LLM Extraction</h2>
-          <p className="text-sm text-muted-foreground">Upload a PDF and define extraction metadata</p>
+          <p className="text-sm text-muted-foreground">Upload a PDF for LLM extraction</p>
         </div>
         <Button
           variant="outline"
@@ -185,32 +151,60 @@ export function SystemOnePage({ onComplete, result }: SystemOneProps) {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <PdfUpload onFileSelect={setFile} selectedFile={file} />
-        <MetadataEditor metadata={metadata} onChange={setMetadata} />
-      </div>
 
-      <Card className="bg-gradient-to-r from-primary/5 to-transparent border-primary/20">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm">Ready to Extract?</CardTitle>
-          <CardDescription>
-            The PDF and metadata will be sent to the LLM for structured data extraction.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="flex items-center gap-3">
-          <Button
-            onClick={handleExtract}
-            disabled={!file}
-            size="lg"
-            className="gap-2"
-          >
-            <Rocket className="w-4 h-4" />
-            Extract Data
-            <ArrowRight className="w-4 h-4" />
-          </Button>
-          {!file && (
-            <span className="text-sm text-muted-foreground">Upload a PDF to continue</span>
-          )}
-        </CardContent>
-      </Card>
+        <Card className={`transition-all duration-500 flex flex-col ${
+          file
+            ? 'bg-gradient-to-br from-primary/10 via-primary/5 to-success/10 border-primary/40 shadow-lg shadow-primary/10 animate-ready-glow'
+            : 'bg-gradient-to-br from-primary/5 to-transparent border-primary/20'
+        }`}>
+          <CardHeader className="pb-2 flex-1">
+            <div className="flex items-center gap-2 mb-2">
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors duration-300 ${
+                file ? 'bg-primary/15' : 'bg-muted/50'
+              }`}>
+                <Rocket className={`w-5 h-5 transition-all duration-500 ${
+                  file ? 'text-primary animate-bounce' : 'text-muted-foreground'
+                }`} />
+              </div>
+              <div>
+                <CardTitle className={`text-sm transition-colors duration-300 ${file ? 'text-primary' : ''}`}>
+                  {file ? 'All Set — Ready to Reconcile!' : 'Ready to Reconcile'}
+                </CardTitle>
+                <CardDescription className="text-xs mt-0.5">
+                  Extract structured data from PDF via LLM
+                </CardDescription>
+              </div>
+            </div>
+
+            <div className="space-y-2 mt-3">
+              <div className="flex items-center gap-2 text-xs">
+                <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
+                  file ? 'bg-success/15 text-success' : 'bg-muted text-muted-foreground'
+                }`}>
+                  {file ? '✓' : '1'}
+                </div>
+                <span className={file ? 'text-foreground' : 'text-muted-foreground'}>
+                  PDF uploaded
+                </span>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="pt-0">
+            <Button
+              onClick={handleExtract}
+              disabled={!file}
+              size="lg"
+              className={`w-full gap-2 transition-all duration-500 ${
+                file ? 'animate-ready-pulse shadow-lg shadow-primary/25' : ''
+              }`}
+            >
+              <Rocket className="w-4 h-4" />
+              Reconcile
+              <ArrowRight className="w-4 h-4" />
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 }

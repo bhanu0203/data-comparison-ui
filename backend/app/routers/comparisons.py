@@ -2,7 +2,7 @@ import asyncio
 import json
 import math
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, Query
 from sqlalchemy import select, func, or_, case
@@ -18,7 +18,7 @@ from app.schemas import (
     StatusCounts,
 )
 from app.config import UPLOAD_DIR
-from app.services.comparison_service import run_comparison
+from app.services.comparison_service import run_comparison, compute_match_percentage
 
 router = APIRouter(prefix="/api/comparisons", tags=["comparisons"])
 
@@ -82,6 +82,68 @@ async def create_comparison(
     asyncio.create_task(run_comparison(run.id))
 
     return _enrich_run(run, agreement)
+
+
+@router.post("/direct", response_model=ComparisonRunDetail, status_code=201)
+async def create_direct_comparison(
+    baseline_json: UploadFile = File(..., description="Baseline JSON file"),
+    llm_output_json: UploadFile = File(..., description="LLM output JSON file"),
+    source_name: str = Form(...),
+    run_name: str = Form(None),
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Upload two JSON files (baseline + LLM output) and create a completed
+    comparison run immediately — no PDF, no metadata construct, no simulated
+    processing stages.  A dummy agreement is created (or reused) from source_name.
+    """
+    # Parse uploaded JSON files
+    try:
+        baseline_data = json.loads(await baseline_json.read())
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        raise HTTPException(400, "baseline_json is not a valid JSON file")
+
+    try:
+        llm_output_data = json.loads(await llm_output_json.read())
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        raise HTTPException(400, "llm_output_json is not a valid JSON file")
+
+    # Find or create a dummy agreement keyed by source_name
+    agr_id = f"DIRECT_{source_name}"
+    result = await db.execute(
+        select(Agreement).where(Agreement.agreement_id == agr_id)
+    )
+    agreement = result.scalar_one_or_none()
+    if not agreement:
+        agreement = Agreement(
+            agreement_id=agr_id,
+            name=source_name,
+            json_data=json.dumps(baseline_data),
+            field_count=0,
+        )
+        db.add(agreement)
+        await db.flush()
+
+    match_pct = compute_match_percentage(llm_output_data, baseline_data)
+    now = datetime.now(timezone.utc)
+
+    run = ComparisonRun(
+        agreement_id=agreement.id,
+        run_name=run_name or f"Direct: {source_name}",
+        status="completed",
+        current_stage="completed",
+        progress_percentage=100,
+        system_one_result=json.dumps(llm_output_data),
+        system_two_data=json.dumps(baseline_data),
+        match_percentage=match_pct,
+        started_at=now,
+        completed_at=now,
+    )
+    db.add(run)
+    await db.commit()
+    await db.refresh(run)
+
+    return _enrich_run_detail(run, agreement)
 
 
 @router.get("", response_model=PaginatedComparisonRuns)

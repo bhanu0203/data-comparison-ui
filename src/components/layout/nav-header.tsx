@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate, useLocation } from 'react-router-dom'
 import { Scale, FileStack, ArrowRightLeft, LayoutDashboard } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -9,6 +9,9 @@ const navItems = [
 ]
 
 export function NavHeader() {
+  const navigate = useNavigate()
+  const location = useLocation()
+
   return (
     <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-6 py-3">
@@ -26,22 +29,28 @@ export function NavHeader() {
           <nav className="flex items-center gap-1">
             {navItems.map((item) => {
               const Icon = item.icon
+              const isActive = location.pathname === item.to || location.pathname.startsWith(item.to + '/')
               return (
-                <NavLink
+                <button
                   key={item.to}
-                  to={item.to}
-                  className={({ isActive }) =>
-                    cn(
-                      'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200',
-                      isActive
-                        ? 'bg-primary text-white shadow-sm'
-                        : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                    )
-                  }
+                  onClick={() => {
+                    if (location.pathname === item.to || location.pathname.startsWith(item.to + '/')) {
+                      // Force re-navigation by pushing with fresh state
+                      navigate(item.to, { state: { refreshKey: Date.now() } })
+                    } else {
+                      navigate(item.to)
+                    }
+                  }}
+                  className={cn(
+                    'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200',
+                    isActive
+                      ? 'bg-primary text-white shadow-sm'
+                      : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                  )}
                 >
                   <Icon className="w-4 h-4" />
                   {item.label}
-                </NavLink>
+                </button>
               )
             })}
           </nav>

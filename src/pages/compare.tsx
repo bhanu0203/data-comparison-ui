@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PdfUpload } from '@/components/pdf-upload'
-import { MetadataEditor } from '@/components/metadata-editor'
 import { AgreementPicker } from '@/components/agreement-picker'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -117,11 +116,80 @@ export function ComparePage() {
         </CardContent>
       </Card>
 
-      {/* PDF + Metadata */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <PdfUpload onFileSelect={setFile} selectedFile={file} />
-        <MetadataEditor metadata={metadata} onChange={setMetadata} />
-      </div>
+      {/* PDF Upload + Reconcile Action — side by side */}
+      {(() => {
+        const isReady = !!selectedAgreementId && !!file && !submitting
+        return (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <PdfUpload onFileSelect={setFile} selectedFile={file} />
+
+            <Card className={`transition-all duration-500 flex flex-col ${
+              isReady
+                ? 'bg-gradient-to-br from-primary/10 via-primary/5 to-success/10 border-primary/40 shadow-lg shadow-primary/10 animate-ready-glow'
+                : 'bg-gradient-to-br from-primary/5 to-transparent border-primary/20'
+            }`}>
+              <CardHeader className="pb-2 flex-1">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors duration-300 ${
+                    isReady ? 'bg-primary/15' : 'bg-muted/50'
+                  }`}>
+                    <Rocket className={`w-5 h-5 transition-all duration-500 ${
+                      isReady ? 'text-primary animate-bounce' : 'text-muted-foreground'
+                    }`} />
+                  </div>
+                  <div>
+                    <CardTitle className={`text-sm transition-colors duration-300 ${isReady ? 'text-primary' : ''}`}>
+                      {isReady ? 'All Set — Ready to Reconcile!' : 'Ready to Reconcile'}
+                    </CardTitle>
+                    <CardDescription className="text-xs mt-0.5">
+                      {selectedAgreement
+                        ? `Reconcile against "${selectedAgreement.name}"`
+                        : 'Select a baseline and upload a PDF'}
+                    </CardDescription>
+                  </div>
+                </div>
+
+                <div className="space-y-2 mt-3">
+                  <div className="flex items-center gap-2 text-xs">
+                    <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
+                      selectedAgreementId ? 'bg-success/15 text-success' : 'bg-muted text-muted-foreground'
+                    }`}>
+                      {selectedAgreementId ? '✓' : '1'}
+                    </div>
+                    <span className={selectedAgreementId ? 'text-foreground' : 'text-muted-foreground'}>
+                      Baseline selected
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs">
+                    <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
+                      file ? 'bg-success/15 text-success' : 'bg-muted text-muted-foreground'
+                    }`}>
+                      {file ? '✓' : '2'}
+                    </div>
+                    <span className={file ? 'text-foreground' : 'text-muted-foreground'}>
+                      PDF uploaded
+                    </span>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <Button
+                  onClick={handleSubmit}
+                  disabled={!isReady}
+                  size="lg"
+                  className={`w-full gap-2 transition-all duration-500 ${
+                    isReady ? 'animate-ready-pulse shadow-lg shadow-primary/25' : ''
+                  }`}
+                >
+                  <Rocket className="w-4 h-4" />
+                  {submitting ? 'Submitting...' : 'Run Reconciliation'}
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        )
+      })()}
 
       {/* Error */}
       {error && (
@@ -129,56 +197,6 @@ export function ComparePage() {
           <AlertCircle className="w-4 h-4" /> {error}
         </div>
       )}
-
-      {/* Submit */}
-      {(() => {
-        const isReady = !!selectedAgreementId && !!file && !submitting
-        return (
-          <Card className={`transition-all duration-500 ${
-            isReady
-              ? 'bg-gradient-to-r from-primary/10 via-primary/5 to-success/10 border-primary/40 shadow-lg shadow-primary/10 animate-ready-glow'
-              : 'bg-gradient-to-r from-primary/5 to-transparent border-primary/20'
-          }`}>
-            <CardHeader className="pb-2">
-              <CardTitle className={`text-sm transition-colors duration-300 ${isReady ? 'text-primary' : ''}`}>
-                {isReady ? 'All Set — Ready to Reconcile!' : 'Ready to Reconcile?'}
-              </CardTitle>
-              <CardDescription>
-                {selectedAgreement
-                  ? `PDF will be extracted via LLM and reconciled against "${selectedAgreement.name}"`
-                  : 'Select a baseline and upload a PDF to continue'}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="flex items-center gap-3">
-              <Button
-                onClick={handleSubmit}
-                disabled={!isReady}
-                size="lg"
-                className={`gap-2 transition-all duration-500 ${
-                  isReady
-                    ? 'animate-ready-pulse shadow-lg shadow-primary/25 scale-105'
-                    : ''
-                }`}
-              >
-                <Rocket className={`w-4 h-4 transition-transform duration-500 ${isReady ? 'animate-bounce' : ''}`} />
-                {submitting ? 'Submitting...' : 'Run Reconciliation'}
-                <ArrowRight className="w-4 h-4" />
-              </Button>
-              {!selectedAgreementId && (
-                <span className="text-sm text-muted-foreground">Select a baseline first</span>
-              )}
-              {selectedAgreementId && !file && (
-                <span className="text-sm text-muted-foreground">Upload a PDF to continue</span>
-              )}
-              {isReady && (
-                <span className="text-sm text-primary font-medium animate-fade-in">
-                  Baseline + PDF ready
-                </span>
-              )}
-            </CardContent>
-          </Card>
-        )
-      })()}
     </div>
   )
 }

@@ -124,106 +124,15 @@ export function RunDetailPage() {
               {run.agreement_display_id && <span>{run.agreement_display_id}</span>}
               {run.agreement_name && <span>{run.agreement_name}</span>}
             </div>
-            {mc && (
-              <Button
-                variant={metadataDrawerOpen ? 'default' : 'outline'}
-                size="sm"
-                className="gap-1.5"
-                onClick={() => setMetadataDrawerOpen(!metadataDrawerOpen)}
-              >
-                <Braces className="w-3 h-3" />
-                Metadata
-                <ChevronRight className={`w-3 h-3 transition-transform duration-200 ${metadataDrawerOpen ? 'rotate-180' : ''}`} />
-              </Button>
-            )}
           </div>
         </div>
 
-        {/* Main content with optional drawer */}
-        <div className="flex gap-4 items-start">
-          {/* Comparison report */}
-          <div className={`min-w-0 transition-all duration-300 ${metadataDrawerOpen ? 'flex-1' : 'w-full'}`}>
-            <ComparisonPage
-              systemOneData={run.system_one_result}
-              systemTwoData={run.system_two_data}
-              matchPercentage={run.match_percentage}
-            />
-          </div>
-
-          {/* Metadata drawer */}
-          {metadataDrawerOpen && mc && (
-            <div className="w-[340px] shrink-0 animate-slide-up">
-              <Card className="sticky top-6 border-primary/20 shadow-lg">
-                <CardHeader className="pb-3">
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-sm flex items-center gap-2">
-                      <Braces className="w-4 h-4 text-primary" />
-                      Metadata Construct
-                    </CardTitle>
-                    <button
-                      onClick={() => setMetadataDrawerOpen(false)}
-                      className="p-1 rounded-md hover:bg-muted transition-colors"
-                    >
-                      <X className="w-3.5 h-3.5 text-muted-foreground" />
-                    </button>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4 max-h-[calc(100vh-200px)] overflow-y-auto">
-                  {/* Schema info */}
-                  <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/40">
-                    <div className="flex-1 space-y-1">
-                      <div className="text-xs text-muted-foreground">Schema</div>
-                      <div className="text-sm font-semibold">{mc.name}</div>
-                    </div>
-                    <Badge variant="outline" className="text-[10px] h-5">
-                      v{mc.version}
-                    </Badge>
-                  </div>
-
-                  {/* Field count */}
-                  <div className="flex items-center justify-between px-1">
-                    <span className="text-xs font-medium text-foreground">
-                      Extraction Fields
-                    </span>
-                    <Badge variant="secondary" className="text-[10px]">
-                      {mc.fields.length} fields
-                    </Badge>
-                  </div>
-
-                  {/* Field list */}
-                  <div className="space-y-2">
-                    {mc.fields.map((field, i) => {
-                      const TypeIcon = TYPE_ICONS[field.type] || Type
-                      const colorClasses = TYPE_COLORS[field.type] || 'bg-gray-50 text-gray-600 border-gray-200'
-                      return (
-                        <div
-                          key={i}
-                          className="group rounded-lg border p-3 space-y-1.5 hover:shadow-sm transition-shadow"
-                        >
-                          <div className="flex items-center justify-between">
-                            <span className="text-sm font-medium text-foreground">{field.fieldName}</span>
-                            <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md border text-[10px] font-medium ${colorClasses}`}>
-                              <TypeIcon className="w-2.5 h-2.5" />
-                              {field.type}
-                            </span>
-                          </div>
-                          <div className="font-mono text-[11px] text-primary/70 bg-primary/5 rounded px-2 py-1 truncate">
-                            {field.jsonPath}
-                          </div>
-                          {field.description && (
-                            <p className="text-[11px] text-muted-foreground leading-relaxed">
-                              {field.description}
-                            </p>
-                          )}
-                        </div>
-                      )
-                    })}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          )}
-        </div>
+        {/* Comparison report */}
+        <ComparisonPage
+          systemOneData={run.system_one_result}
+          systemTwoData={run.system_two_data}
+          matchPercentage={run.match_percentage}
+        />
       </div>
     )
   }
