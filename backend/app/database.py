@@ -18,3 +18,15 @@ async def get_db():
 async def init_db():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+        # Migrate existing tables: add new nullable columns if missing
+        await conn.run_sync(_add_missing_columns)
+
+
+def _add_missing_columns(conn):
+    """Add columns introduced after initial schema creation (SQLite safe)."""
+    import sqlalchemy as sa
+
+    inspector = sa.inspect(conn)
+    columns = {c["name"] for c in inspector.get_columns("comparison_runs")}
+    if "array_keys" not in columns:
+        conn.execute(sa.text("ALTER TABLE comparison_runs ADD COLUMN array_keys TEXT"))

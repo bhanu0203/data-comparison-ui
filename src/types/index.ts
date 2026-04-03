@@ -23,6 +23,14 @@ export interface ExtractionResult {
 
 export type DiffType = 'match' | 'mismatch' | 'missing_left' | 'missing_right' | 'type_mismatch' | 'structural'
 
+/**
+ * Maps array JSON paths to the key field used for matching elements.
+ * e.g. { "parties": "name", "obligations.items": "id" }
+ * When comparing arrays at these paths, elements are matched by key value
+ * instead of index, so reordering doesn't produce false mismatches.
+ */
+export type ArrayKeyConfig = Record<string, string>
+
 export interface DiffEntry {
   path: string
   key: string
@@ -98,6 +106,7 @@ export interface ComparisonRunDetail extends ComparisonRun {
   system_one_result: Record<string, unknown> | null
   system_two_data: Record<string, unknown> | null
   metadata_construct: Record<string, unknown> | null
+  array_keys: ArrayKeyConfig | null
 }
 
 export interface RunProgress {

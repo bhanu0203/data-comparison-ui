@@ -1,4 +1,4 @@
-import type { DiffEntry, DiffSummary, DiffType } from '@/types'
+import type { DiffEntry, DiffSummary, DiffType, ArrayKeyConfig } from '@/types'
 
 function getType(val: unknown): string {
   if (val === null || val === undefined) return 'null'
@@ -10,11 +10,20 @@ function isObject(val: unknown): val is Record<string, unknown> {
   return val !== null && typeof val === 'object' && !Array.isArray(val)
 }
 
+/**
+ * Strip array indices from a path to get the "shape" path for key config lookup.
+ * e.g. "parties[0].name" → "parties", "a.items[2].sub[1]" → "a.items.sub"
+ */
+function toKeyConfigPath(path: string): string {
+  return path.replace(/\[\d+\]/g, '').replace(/\.$/, '')
+}
+
 export function deepDiff(
   left: unknown,
   right: unknown,
   path = '',
-  depth = 0
+  depth = 0,
+  arrayKeys?: ArrayKeyConfig
 ): DiffEntry[] {
   const entries: DiffEntry[] = []
 
@@ -69,7 +78,7 @@ export function deepDiff(
             diffType: 'type_mismatch',
           })
         } else if (isObject(left[key]) || Array.isArray(left[key])) {
-          const children = deepDiff(left[key], right[key], fullPath, depth + 1)
+          const children = deepDiff(left[key], right[key], fullPath, depth + 1, arrayKeys)
           const hasChanges = children.some(c => c.diffType !== 'match')
           entries.push({
             path: fullPath,
@@ -106,6 +115,16 @@ export function deepDiff(
 
   // Both are arrays
   if (leftIsArr && rightIsArr) {
+    // Check if we have a key config for this array path
+    const configPath = toKeyConfigPath(path)
+    const keyField = arrayKeys?.[configPath]
+
+    // Use key-based matching if configured and elements are objects
+    if (keyField && left.length > 0 && right.length > 0 && isObject(left[0]) && isObject(right[0])) {
+      return diffArrayByKey(left, right, path, depth, keyField, arrayKeys)
+    }
+
+    // Fallback: index-by-index comparison
     const maxLen = Math.max(left.length, right.length)
     for (let i = 0; i < maxLen; i++) {
       const fullPath = `${path}[${i}]`
@@ -128,7 +147,7 @@ export function deepDiff(
           diffType: 'missing_right',
         })
       } else {
-        const children = deepDiff(left[i], right[i], fullPath, depth + 1)
+        const children = deepDiff(left[i], right[i], fullPath, depth + 1, arrayKeys)
         if (isObject(left[i]) || Array.isArray(left[i])) {
           const hasChanges = children.some(c => c.diffType !== 'match')
           entries.push({
@@ -162,6 +181,108 @@ export function deepDiff(
       }
     }
     return entries
+  }
+
+  return entries
+}
+
+/**
+ * Match array elements by a key field, then diff matched pairs.
+ * - Matched pairs: deep-diff their contents
+ * - In right (baseline) but not left (LLM): missing_left (LLM failed to extract)
+ * - In left (LLM) but not right (baseline): missing_right (LLM Only)
+ */
+function diffArrayByKey(
+  left: unknown[],
+  right: unknown[],
+  path: string,
+  depth: number,
+  keyField: string,
+  arrayKeys?: ArrayKeyConfig
+): DiffEntry[] {
+  const entries: DiffEntry[] = []
+
+  // Build map of right (baseline) elements by key
+  const rightByKey = new Map<string, { index: number; value: Record<string, unknown> }>()
+  for (let i = 0; i < right.length; i++) {
+    if (isObject(right[i])) {
+      const key = String((right[i] as Record<string, unknown>)[keyField] ?? '')
+      if (key) rightByKey.set(key, { index: i, value: right[i] as Record<string, unknown> })
+    }
+  }
+
+  const matchedRightKeys = new Set<string>()
+  let outputIndex = 0
+
+  // Walk left (LLM) elements, try to match each to a right (baseline) element
+  for (let i = 0; i < left.length; i++) {
+    const leftEl = left[i]
+    if (!isObject(leftEl)) {
+      // Non-object element — fallback to positional
+      const fullPath = `${path}[${outputIndex}]`
+      if (i < right.length) {
+        if (leftEl === right[i]) {
+          entries.push({ path: fullPath, key: `[${outputIndex}]`, depth: depth + 1, leftValue: leftEl, rightValue: right[i], diffType: 'match' })
+        } else {
+          entries.push({ path: fullPath, key: `[${outputIndex}]`, depth: depth + 1, leftValue: leftEl, rightValue: right[i], diffType: 'mismatch' })
+        }
+      } else {
+        entries.push({ path: fullPath, key: `[${outputIndex}]`, depth: depth + 1, leftValue: leftEl, rightValue: undefined, diffType: 'missing_right' })
+      }
+      outputIndex++
+      continue
+    }
+
+    const keyValue = String((leftEl as Record<string, unknown>)[keyField] ?? '')
+    const fullPath = `${path}[${outputIndex}]`
+    const displayKey = keyValue ? `[${keyField}=${keyValue}]` : `[${outputIndex}]`
+
+    if (keyValue && rightByKey.has(keyValue)) {
+      // Matched — diff the pair
+      matchedRightKeys.add(keyValue)
+      const rightEl = rightByKey.get(keyValue)!.value
+      const children = deepDiff(leftEl, rightEl, fullPath, depth + 1, arrayKeys)
+      const hasChanges = children.some(c => c.diffType !== 'match')
+      entries.push({
+        path: fullPath,
+        key: displayKey,
+        depth: depth + 1,
+        leftValue: leftEl,
+        rightValue: rightEl,
+        diffType: hasChanges ? 'structural' : 'match',
+        children,
+      })
+    } else {
+      // In LLM but not baseline → LLM Only
+      entries.push({
+        path: fullPath,
+        key: displayKey,
+        depth: depth + 1,
+        leftValue: leftEl,
+        rightValue: undefined,
+        diffType: 'missing_right',
+        children: flattenValue(leftEl, fullPath, depth + 2, 'missing_right'),
+      })
+    }
+    outputIndex++
+  }
+
+  // Remaining unmatched right (baseline) elements → missing_left (LLM failed to extract)
+  for (const [key, { value }] of rightByKey) {
+    if (!matchedRightKeys.has(key)) {
+      const fullPath = `${path}[${outputIndex}]`
+      const displayKey = `[${keyField}=${key}]`
+      entries.push({
+        path: fullPath,
+        key: displayKey,
+        depth: depth + 1,
+        leftValue: undefined,
+        rightValue: value,
+        diffType: 'missing_left',
+        children: flattenValue(value, fullPath, depth + 2, 'missing_left'),
+      })
+      outputIndex++
+    }
   }
 
   return entries
@@ -218,6 +339,8 @@ export function computeSummary(diffs: DiffEntry[]): DiffSummary {
   walk(diffs)
 
   const totalFields = matched + mismatched + missingLeft + missingRight + typeMismatches
+  // Match rate is based on baseline fields only — LLM-only fields don't reduce match %
+  const baselineFields = matched + mismatched + missingLeft + typeMismatches
 
   return {
     totalFields,
@@ -226,6 +349,6 @@ export function computeSummary(diffs: DiffEntry[]): DiffSummary {
     missingLeft,
     missingRight,
     typeMismatches,
-    matchPercentage: totalFields > 0 ? Math.round((matched / totalFields) * 100) : 0,
+    matchPercentage: baselineFields > 0 ? Math.round((matched / baselineFields) * 100) : 0,
   }
 }

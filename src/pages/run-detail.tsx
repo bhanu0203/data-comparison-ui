@@ -132,6 +132,7 @@ export function RunDetailPage() {
           systemOneData={run.system_one_result}
           systemTwoData={run.system_two_data}
           matchPercentage={run.match_percentage}
+          arrayKeys={run.array_keys ?? undefined}
         />
       </div>
     )

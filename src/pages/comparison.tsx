@@ -16,7 +16,7 @@ import {
   Code2,
   Download,
 } from 'lucide-react'
-import type { ExtractionResult, DiffType } from '@/types'
+import type { ExtractionResult, DiffType, ArrayKeyConfig } from '@/types'
 
 type ViewMode = 'tree' | 'table' | 'side-by-side' | 'raw'
 
@@ -24,6 +24,7 @@ interface ComparisonProps {
   systemOneData: ExtractionResult
   systemTwoData: ExtractionResult
   matchPercentage?: number | null
+  arrayKeys?: ArrayKeyConfig
 }
 
 const viewModes: { value: ViewMode; label: string; icon: typeof TreePine }[] = [
@@ -33,11 +34,11 @@ const viewModes: { value: ViewMode; label: string; icon: typeof TreePine }[] = [
   { value: 'raw', label: 'Raw JSON', icon: Code2 },
 ]
 
-export function ComparisonPage({ systemOneData, systemTwoData, matchPercentage }: ComparisonProps) {
+export function ComparisonPage({ systemOneData, systemTwoData, matchPercentage, arrayKeys }: ComparisonProps) {
   const [viewMode, setViewMode] = useState<ViewMode>('tree')
   const [filter, setFilter] = useState<DiffType | 'all'>('all')
 
-  const diffs = useMemo(() => deepDiff(systemOneData, systemTwoData), [systemOneData, systemTwoData])
+  const diffs = useMemo(() => deepDiff(systemOneData, systemTwoData, '', 0, arrayKeys), [systemOneData, systemTwoData, arrayKeys])
   const summary = useMemo(() => computeSummary(diffs), [diffs])
 
   const handleExport = () => {

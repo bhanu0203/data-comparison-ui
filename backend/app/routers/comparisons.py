@@ -47,6 +47,7 @@ def _enrich_run_detail(run: ComparisonRun, agreement: Agreement | None) -> dict:
     data["system_one_result"] = json.loads(run.system_one_result) if run.system_one_result else None
     data["system_two_data"] = json.loads(run.system_two_data) if run.system_two_data else None
     data["metadata_construct"] = json.loads(run.metadata_construct) if run.metadata_construct else None
+    data["array_keys"] = json.loads(run.array_keys) if run.array_keys else None
     return data
 
 
@@ -90,6 +91,7 @@ async def create_direct_comparison(
     llm_output_json: UploadFile = File(..., description="LLM output JSON file"),
     source_name: str = Form(...),
     run_name: str = Form(None),
+    array_keys: str = Form(None, description="JSON object mapping array paths to key fields, e.g. {\"parties\": \"name\"}"),
     db: AsyncSession = Depends(get_db),
 ):
     """
@@ -108,6 +110,18 @@ async def create_direct_comparison(
     except (json.JSONDecodeError, UnicodeDecodeError):
         raise HTTPException(400, "llm_output_json is not a valid JSON file")
 
+    # Validate array_keys if provided
+    parsed_array_keys = None
+    if array_keys:
+        try:
+            parsed_array_keys = json.loads(array_keys)
+            if not isinstance(parsed_array_keys, dict) or not all(
+                isinstance(k, str) and isinstance(v, str) for k, v in parsed_array_keys.items()
+            ):
+                raise ValueError
+        except (json.JSONDecodeError, ValueError):
+            raise HTTPException(400, "array_keys must be a JSON object mapping string paths to string key fields")
+
     # Find or create a dummy agreement keyed by source_name
     agr_id = f"DIRECT_{source_name}"
     result = await db.execute(
@@ -124,7 +138,7 @@ async def create_direct_comparison(
         db.add(agreement)
         await db.flush()
 
-    match_pct = compute_match_percentage(llm_output_data, baseline_data)
+    match_pct = compute_match_percentage(llm_output_data, baseline_data, parsed_array_keys)
     now = datetime.now(timezone.utc)
 
     run = ComparisonRun(
@@ -135,6 +149,7 @@ async def create_direct_comparison(
         progress_percentage=100,
         system_one_result=json.dumps(llm_output_data),
         system_two_data=json.dumps(baseline_data),
+        array_keys=json.dumps(parsed_array_keys) if parsed_array_keys else None,
         match_percentage=match_pct,
         started_at=now,
         completed_at=now,

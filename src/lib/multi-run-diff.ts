@@ -98,7 +98,7 @@ export function analyzeMultipleRuns(runs: ComparisonRunDetail[]): MultiRunAnalys
   const analyses: RunAnalysis[] = sorted.map((run) => {
     const s1 = run.system_one_result || {}
     const s2 = run.system_two_data || {}
-    const diffs = deepDiff(s1, s2)
+    const diffs = deepDiff(s1, s2, '', 0, run.array_keys ?? undefined)
     const summary = computeSummary(diffs)
     return {
       runId: run.id,

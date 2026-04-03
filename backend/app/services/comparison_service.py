@@ -8,33 +8,88 @@ from app.models import ComparisonRun
 from app.enums import RunStatus, RunStage, STAGE_PROGRESS
 
 
-def compute_match_percentage(left: dict, right: dict) -> float:
-    """Simple recursive match percentage computation."""
-    matches = 0
-    total = 0
+def _strip_array_indices(path: str) -> str:
+    """Strip array indices from a path for key config lookup.
+    e.g. 'parties[0].name' → 'parties', 'a.items[2].sub[1]' → 'a.items.sub'
+    """
+    import re
+    return re.sub(r'\[\d+\]', '', path).rstrip('.')
 
-    def walk(l: object, r: object) -> None:
-        nonlocal matches, total
+
+def compute_match_percentage(left: dict, right: dict, array_keys: dict[str, str] | None = None) -> float:
+    """Recursive match percentage computation with optional key-based array matching.
+
+    Match rate is based on baseline (right) fields only — LLM-only fields
+    (present in left but not right) do not reduce the match percentage.
+    """
+    matches = 0
+    baseline_fields = 0  # fields that exist in baseline (right)
+
+    def walk(l: object, r: object, path: str = '') -> None:
+        nonlocal matches, baseline_fields
         if isinstance(l, dict) and isinstance(r, dict):
             all_keys = set(list(l.keys()) + list(r.keys()))
             for k in all_keys:
+                child_path = f"{path}.{k}" if path else k
                 if k in l and k in r:
-                    walk(l[k], r[k])
-                else:
-                    total += 1
+                    walk(l[k], r[k], child_path)
+                elif k in r:
+                    # Baseline has it, LLM doesn't → counts against match rate
+                    baseline_fields += 1
+                # else: LLM-only field → ignored for match rate
         elif isinstance(l, list) and isinstance(r, list):
-            for i in range(max(len(l), len(r))):
-                if i < len(l) and i < len(r):
-                    walk(l[i], r[i])
-                else:
-                    total += 1
+            config_path = _strip_array_indices(path)
+            key_field = array_keys.get(config_path) if array_keys else None
+
+            if key_field and len(l) > 0 and len(r) > 0 and isinstance(l[0], dict) and isinstance(r[0], dict):
+                _walk_array_by_key(l, r, path, key_field)
+            else:
+                for i in range(max(len(l), len(r))):
+                    child_path = f"{path}[{i}]"
+                    if i < len(l) and i < len(r):
+                        walk(l[i], r[i], child_path)
+                    elif i < len(r):
+                        # Baseline element, LLM missing
+                        baseline_fields += 1
+                    # else: LLM-only element → ignored
         else:
-            total += 1
+            baseline_fields += 1
             if l == r:
                 matches += 1
 
+    def _walk_array_by_key(l: list, r: list, path: str, key_field: str) -> None:
+        """Match array elements by key field, then walk matched pairs."""
+        nonlocal baseline_fields
+        right_by_key: dict[str, dict] = {}
+        for item in r:
+            if isinstance(item, dict):
+                key_val = str(item.get(key_field, ''))
+                if key_val:
+                    right_by_key[key_val] = item
+
+        matched_right_keys: set[str] = set()
+        idx = 0
+        for item in l:
+            child_path = f"{path}[{idx}]"
+            if isinstance(item, dict):
+                key_val = str(item.get(key_field, ''))
+                if key_val and key_val in right_by_key:
+                    matched_right_keys.add(key_val)
+                    walk(item, right_by_key[key_val], child_path)
+                # else: LLM-only element → ignored for match rate
+            else:
+                if idx < len(r):
+                    walk(item, r[idx], child_path)
+                # else: LLM-only → ignored
+            idx += 1
+
+        # Unmatched right (baseline) elements → counts against match rate
+        for key_val in right_by_key:
+            if key_val not in matched_right_keys:
+                baseline_fields += 1
+
     walk(left, right)
-    return round((matches / total) * 100, 1) if total > 0 else 100.0
+    return round((matches / baseline_fields) * 100, 1) if baseline_fields > 0 else 100.0
 
 
 # ── Simulated LLM extraction variations ──

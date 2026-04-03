@@ -36,6 +36,7 @@ class ComparisonRun(Base):
     metadata_construct: Mapped[str | None] = mapped_column(Text, nullable=True)
     system_one_result: Mapped[str | None] = mapped_column(Text, nullable=True)
     system_two_data: Mapped[str | None] = mapped_column(Text, nullable=True)
+    array_keys: Mapped[str | None] = mapped_column(Text, nullable=True)
     match_percentage: Mapped[float | None] = mapped_column(Float, nullable=True, index=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, index=True)
     started_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)

@@ -51,6 +51,7 @@ class ComparisonRunDetail(ComparisonRunResponse):
     system_one_result: dict | None = None
     system_two_data: dict | None = None
     metadata_construct: dict | None = None
+    array_keys: dict[str, str] | None = None
 
     model_config = {"from_attributes": True}
 
