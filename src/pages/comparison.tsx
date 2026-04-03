@@ -146,6 +146,7 @@ export function ComparisonPage({ systemOneData, systemTwoData, matchPercentage, 
               rightData={systemTwoData}
               leftLabel="LLM Extraction"
               rightLabel="Baseline (Ground Truth)"
+              arrayKeys={arrayKeys}
             />
           )}
         </CardContent>

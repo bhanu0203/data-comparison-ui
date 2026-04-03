@@ -2,12 +2,14 @@ import { useRef, useCallback, useMemo } from 'react'
 import { Copy, Check } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useState } from 'react'
+import type { ArrayKeyConfig } from '@/types'
 
 interface RawDiffViewerProps {
   leftData: unknown
   rightData: unknown
   leftLabel?: string
   rightLabel?: string
+  arrayKeys?: ArrayKeyConfig
 }
 
 type LineStatus = 'match' | 'changed' | 'removed' | 'added' | 'section'
@@ -22,6 +24,86 @@ interface DiffLine {
 
 function jsonToLines(data: unknown): string[] {
   return JSON.stringify(data, null, 2).split('\n')
+}
+
+/**
+ * Reorder arrays in `data` so elements match the order found in `reference`,
+ * using the key fields from `arrayKeys`. This ensures the raw JSON diff
+ * aligns matched elements instead of showing index-based mismatches.
+ */
+function alignToBaseline(data: unknown, reference: unknown, arrayKeys: ArrayKeyConfig, path = ''): unknown {
+  if (Array.isArray(data) && Array.isArray(reference)) {
+    const configPath = path.replace(/\[\d+\]/g, '').replace(/\.$/, '')
+    const keyField = arrayKeys[configPath]
+
+    if (keyField && data.length > 0 && reference.length > 0 &&
+        typeof data[0] === 'object' && data[0] !== null &&
+        typeof reference[0] === 'object' && reference[0] !== null) {
+      const leftByKey = new Map<string, unknown>()
+      const unmatched: unknown[] = []
+      for (const item of data) {
+        const key = String((item as Record<string, unknown>)[keyField] ?? '')
+        if (key) leftByKey.set(key, item)
+        else unmatched.push(item)
+      }
+
+      // Build reordered array: baseline order first, then LLM-only elements
+      const reordered: unknown[] = []
+      const usedKeys = new Set<string>()
+      for (const refItem of reference) {
+        const key = String((refItem as Record<string, unknown>)[keyField] ?? '')
+        if (key && leftByKey.has(key)) {
+          usedKeys.add(key)
+          reordered.push(leftByKey.get(key))
+        }
+      }
+      // Append LLM-only elements at the end
+      for (const item of data) {
+        const key = String((item as Record<string, unknown>)[keyField] ?? '')
+        if (key && !usedKeys.has(key)) reordered.push(item)
+      }
+      for (const item of unmatched) reordered.push(item)
+
+      // Recurse into each element
+      return reordered.map((item, i) =>
+        i < reference.length
+          ? alignToBaseline(item, reference[i], arrayKeys, `${path}[${i}]`)
+          : item
+      )
+    }
+
+    // No key config — recurse positionally
+    return data.map((item, i) =>
+      i < reference.length
+        ? alignToBaseline(item, reference[i], arrayKeys, `${path}[${i}]`)
+        : item
+    )
+  }
+
+  if (data !== null && typeof data === 'object' && !Array.isArray(data) &&
+      reference !== null && typeof reference === 'object' && !Array.isArray(reference)) {
+    const dataObj = data as Record<string, unknown>
+    const refObj = reference as Record<string, unknown>
+    const result: Record<string, unknown> = {}
+
+    // Add keys in baseline order first — this aligns lines so LCS
+    // doesn't bleed across object boundaries when fields are missing
+    for (const k of Object.keys(refObj)) {
+      if (k in dataObj) {
+        const childPath = path ? `${path}.${k}` : k
+        result[k] = alignToBaseline(dataObj[k], refObj[k], arrayKeys, childPath)
+      }
+    }
+    // Then append LLM-only keys at the end
+    for (const k of Object.keys(dataObj)) {
+      if (!(k in refObj)) {
+        result[k] = dataObj[k]
+      }
+    }
+    return result
+  }
+
+  return data
 }
 
 /**
@@ -154,19 +236,27 @@ function CopyButton({ text, label }: { text: string; label: string }) {
   )
 }
 
-export function RawDiffViewer({ leftData, rightData, leftLabel = 'LLM Extract', rightLabel = 'Baseline' }: RawDiffViewerProps) {
+export function RawDiffViewer({ leftData, rightData, leftLabel = 'LLM Extract', rightLabel = 'Baseline', arrayKeys }: RawDiffViewerProps) {
   const leftRef = useRef<HTMLDivElement>(null)
   const rightRef = useRef<HTMLDivElement>(null)
   const isSyncing = useRef(false)
 
-  const leftText = useMemo(() => JSON.stringify(leftData, null, 2), [leftData])
+  // Reorder LLM arrays to match baseline order when arrayKeys is configured
+  const alignedLeftData = useMemo(
+    () => arrayKeys && Object.keys(arrayKeys).length > 0
+      ? alignToBaseline(leftData, rightData, arrayKeys)
+      : leftData,
+    [leftData, rightData, arrayKeys]
+  )
+
+  const leftText = useMemo(() => JSON.stringify(alignedLeftData, null, 2), [alignedLeftData])
   const rightText = useMemo(() => JSON.stringify(rightData, null, 2), [rightData])
 
   const diffLines = useMemo(() => {
-    const leftLines = jsonToLines(leftData)
+    const leftLines = jsonToLines(alignedLeftData)
     const rightLines = jsonToLines(rightData)
     return computeLineDiff(leftLines, rightLines)
-  }, [leftData, rightData])
+  }, [alignedLeftData, rightData])
 
   const stats = useMemo(() => {
     let matched = 0, changed = 0, added = 0, removed = 0
